@@ -25,13 +25,13 @@ class AnalyzedFunctionTest extends TestCase
      */
     private $analyzed_function;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $analyzed_class          = new AnalyzedClass($this->namespace, $this->class_name, '', null, [], []);
         $this->analyzed_function = new AnalyzedFunction($analyzed_class, $this->function_name);
     }
 
-    public function testAddCollectedArgumentsShouldAddArguments()
+    public function testAddCollectedArgumentsShouldAddArguments(): void
     {
         $arguments_0 = [new NonScalarPhpType('ns', 'SomeObject', '', null, [], [])];
         $arguments_1 = [new NonScalarPhpType('ns', 'SomeObject', '', null, [], [])];
@@ -52,7 +52,7 @@ class AnalyzedFunctionTest extends TestCase
         self::assertFalse($this->analyzed_function->hasReturnDeclaration());
     }
 
-    public function testAddCollectedReturnShouldAddReturns()
+    public function testAddCollectedReturnShouldAddReturns(): void
     {
         $this->analyzed_function->addCollectedReturn(new AnalyzedReturn(new ScalarPhpType(ScalarPhpType::TYPE_STRING)));
         $this->analyzed_function->addCollectedReturn(new AnalyzedReturn(new ScalarPhpType(ScalarPhpType::TYPE_INT)));
@@ -64,7 +64,7 @@ class AnalyzedFunctionTest extends TestCase
         self::assertSame(ScalarPhpType::TYPE_INT, $collected_returns[1]->getType()->getName());
     }
 
-    public function testAddAllCollectedArgumentsShouldAppendAListOfArguments()
+    public function testAddAllCollectedArgumentsShouldAppendAListOfArguments(): void
     {
         $analyzed_calls = [
             [new ScalarPhpType(ScalarPhpType::TYPE_STRING), new ScalarPhpType(ScalarPhpType::TYPE_INT)],
@@ -76,7 +76,7 @@ class AnalyzedFunctionTest extends TestCase
         self::assertSameSize($analyzed_calls, $this->analyzed_function->getCollectedArguments());
     }
 
-    public function testAddAllCollectedReturnsShouldAppendAListOfReturns()
+    public function testAddAllCollectedReturnsShouldAppendAListOfReturns(): void
     {
         $analyzed_returns = [
             new AnalyzedReturn(new NonScalarPhpType('ns', 'SomeObject', '', null, [])),
@@ -89,7 +89,7 @@ class AnalyzedFunctionTest extends TestCase
         self::assertSameSize($analyzed_returns, $this->analyzed_function->getCollectedReturns());
     }
 
-    public function testSetClassShouldChangeTheClass()
+    public function testSetClassShouldChangeTheClass(): void
     {
         $class = new AnalyzedClass('New\Namespace', 'NewClassName', 'file.php', null, []);
         $this->analyzed_function->setClass($class);
@@ -98,14 +98,14 @@ class AnalyzedFunctionTest extends TestCase
         self::assertSame($class, $new_class);
     }
 
-    public function testDefinedReturnTypeShouldBeUpdatedAfterBeingSet()
+    public function testDefinedReturnTypeShouldBeUpdatedAfterBeingSet(): void
     {
         self::assertNull($this->analyzed_function->getDefinedReturnType());
         $this->analyzed_function->setDefinedReturnType(ScalarPhpType::TYPE_FLOAT);
         self::assertSame(ScalarPhpType::TYPE_FLOAT, $this->analyzed_function->getDefinedReturnType());
     }
 
-    public function testDefinedParametersShouldBeUpdatedAfterBeingSet()
+    public function testDefinedParametersShouldBeUpdatedAfterBeingSet(): void
     {
         self::assertEmpty($this->analyzed_function->getDefinedParameters());
 
@@ -118,7 +118,7 @@ class AnalyzedFunctionTest extends TestCase
         self::assertSame($analyzed_parameters, $this->analyzed_function->getDefinedParameters());
     }
 
-    public function testDocBlockShouldBeUpdatedAfterBeingSet()
+    public function testDocBlockShouldBeUpdatedAfterBeingSet(): void
     {
         self::assertNull($this->analyzed_function->getDocblock());
 

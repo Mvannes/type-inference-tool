@@ -29,7 +29,7 @@ class MemoryRecordStorage implements RecordStorageInterface
      *
      * @param EntryRecord $entry_record
      */
-    public function appendEntryRecord(EntryRecord $entry_record)
+    public function appendEntryRecord(EntryRecord $entry_record): void
     {
         $this->entry_records[] = $entry_record;
     }
@@ -39,7 +39,7 @@ class MemoryRecordStorage implements RecordStorageInterface
      *
      * @param ReturnRecord $return_record
      */
-    public function appendReturnRecord(ReturnRecord $return_record)
+    public function appendReturnRecord(ReturnRecord $return_record): void
     {
         $this->return_records[] = $return_record;
     }
@@ -50,7 +50,7 @@ class MemoryRecordStorage implements RecordStorageInterface
      *
      * @param callable $callback(EntryRecord, parameter, ReturnRecord)
      */
-    public function loopEntryRecords(callable $callback)
+    public function loopEntryRecords(callable $callback): void
     {
         foreach ($this->entry_records as $entry_record) {
             $matching_return = null;
@@ -68,10 +68,7 @@ class MemoryRecordStorage implements RecordStorageInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function finishInsertion()
+    public function finishInsertion(): void
     {
         // No action needed
     }
@@ -79,7 +76,7 @@ class MemoryRecordStorage implements RecordStorageInterface
     /**
      * Deletes all records.
      */
-    public function clearRecords()
+    public function clearRecords(): void
     {
         $this->entry_records  = [];
         $this->return_records = [];

@@ -30,7 +30,7 @@ class FileRecordStorageTest extends TestCase
      */
     private $return_record;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storage       = new FileRecordStorage();
         $function_number     = 123;
@@ -38,19 +38,19 @@ class FileRecordStorageTest extends TestCase
         $this->return_record = new ReturnRecord($function_number, 'SomeType');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->storage->clearRecords();
     }
 
-    public function testWhenAppendingEntryRecordThenFileShouldBeAppendedWithRecord()
+    public function testWhenAppendingEntryRecordThenFileShouldBeAppendedWithRecord(): void
     {
         self::assertFileNotExists($this->storage->getEntryRecordFileLocation());
         $this->storage->appendEntryRecord($this->entry_record);
         $this->storage->finishInsertion();
         self::assertFileExists($this->storage->getEntryRecordFileLocation());
 
-        $this->storage->loopEntryRecords(function (EntryRecord $record, array $params, $return_type) {
+        $this->storage->loopEntryRecords(function (EntryRecord $record, array $params, $return_type): void {
             self::assertEquals($this->entry_record, $record);
             self::assertNull($return_type);
         });
@@ -58,7 +58,7 @@ class FileRecordStorageTest extends TestCase
         $this->storage->clearRecords();
     }
 
-    public function testWhenAppendingReturnRecordThenFileShouldBeAppendedWithRecord()
+    public function testWhenAppendingReturnRecordThenFileShouldBeAppendedWithRecord(): void
     {
         self::assertFileNotExists($this->storage->getReturnRecordFileLocation());
 
@@ -67,7 +67,7 @@ class FileRecordStorageTest extends TestCase
 
         self::assertFileExists($this->storage->getReturnRecordFileLocation());
 
-        $this->storage->loopEntryRecords(function (EntryRecord $record, array $params, $return_type) {
+        $this->storage->loopEntryRecords(function (EntryRecord $record, array $params, $return_type): void {
             self::assertSame($this->return_record->getReturnType(), $return_type);
         });
 

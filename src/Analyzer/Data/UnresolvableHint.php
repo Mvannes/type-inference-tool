@@ -13,9 +13,9 @@ namespace Hostnet\Component\TypeInference\Analyzer\Data;
  */
 final class UnresolvableHint
 {
-    const HINT_TYPE_UNDEFINED = -1;
-    const HINT_TYPE_PARAMETER = 0;
-    const HINT_TYPE_RETURN    = 1;
+    public const HINT_TYPE_UNDEFINED = -1;
+    public const HINT_TYPE_PARAMETER = 0;
+    public const HINT_TYPE_RETURN    = 1;
 
     /**
      * Indication whether the UnresolvableHint applies to a parameter (0)

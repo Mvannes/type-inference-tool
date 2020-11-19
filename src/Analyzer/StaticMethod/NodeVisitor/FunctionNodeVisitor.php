@@ -105,7 +105,7 @@ final class FunctionNodeVisitor extends AbstractAnalyzingNodeVisitor
      *
      * @param Node $node
      */
-    private function handleNamespaceNode(Node $node)
+    private function handleNamespaceNode(Node $node): void
     {
         if (!($node instanceof Namespace_)) {
             return;
@@ -119,7 +119,7 @@ final class FunctionNodeVisitor extends AbstractAnalyzingNodeVisitor
      *
      * @param Node $node
      */
-    private function handleClassMethodNode(Node $node)
+    private function handleClassMethodNode(Node $node): void
     {
         if (!$node instanceof ClassMethod) {
             return;
@@ -149,7 +149,7 @@ final class FunctionNodeVisitor extends AbstractAnalyzingNodeVisitor
      *
      * @param Node $node
      */
-    private function handleClassOrInterfaceNode(Node $node)
+    private function handleClassOrInterfaceNode(Node $node): void
     {
         if (!$node instanceof Class_ && !$node instanceof Interface_ && !$node instanceof Trait_) {
             return;
@@ -192,7 +192,7 @@ final class FunctionNodeVisitor extends AbstractAnalyzingNodeVisitor
         $file_path = null;
         $fqcn      = $namespace . '\\' . $class_name;
         if (array_key_exists($fqcn, $this->function_index)) {
-            $indexed_function =  $this->function_index[$fqcn];
+            $indexed_function = $this->function_index[$fqcn];
             $file_path        = $indexed_function['path'];
             $functions        = StaticAnalyzer::listAllMethods($this->function_index, $fqcn);
         }

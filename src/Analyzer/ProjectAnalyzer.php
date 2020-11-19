@@ -35,8 +35,8 @@ class ProjectAnalyzer
      * Prefix used for logs outputted by this class. Also used
      * by stopwatch for this class.
      */
-    const TIMER_LOG_NAME = 'PROJECT_ANALYZER';
-    const VENDOR_FOLDER  = 'vendor';
+    private const TIMER_LOG_NAME = 'PROJECT_ANALYZER';
+    public const VENDOR_FOLDER   = 'vendor';
 
     /**
      * @var string
@@ -645,7 +645,7 @@ class ProjectAnalyzer
      *
      * @param string[] $ignored_folders
      */
-    public function setIgnoredFolders(array $ignored_folders)
+    public function setIgnoredFolders(array $ignored_folders): void
     {
         $this->ignored_folders = $ignored_folders;
     }
@@ -655,8 +655,11 @@ class ProjectAnalyzer
      * @param PhpTypeInterface[] $used_types
      * @param int $arg_number
      */
-    private function logInconsistentParamType(AnalyzedFunction $analyzed_function, array $used_types, int $arg_number)
-    {
+    private function logInconsistentParamType(
+        AnalyzedFunction $analyzed_function,
+        array $used_types,
+        int $arg_number
+    ): void {
         $used_type_names = [];
         foreach ($used_types as $type) {
             $used_type_names[] = $type->getName();
@@ -665,10 +668,10 @@ class ProjectAnalyzer
         $this->logger->warning(
             "TYPE_HINT: Inconsistent types used for argument {arg_nr} in function '{fqcn}::{function}': {types}.",
             [
-                'arg_nr' => $arg_number,
+                'arg_nr'   => $arg_number,
                 'function' => $analyzed_function->getFunctionName(),
-                'fqcn' => $analyzed_function->getClass()->getFqcn(),
-                'types' => implode(', ', $used_type_names),
+                'fqcn'     => $analyzed_function->getClass()->getFqcn(),
+                'types'    => implode(', ', $used_type_names),
             ]
         );
     }
@@ -677,7 +680,7 @@ class ProjectAnalyzer
      * @param AnalyzedFunction $analyzed_function
      * @param AnalyzedReturn[] $return_types
      */
-    private function logInconsistentReturnType(AnalyzedFunction $analyzed_function, array $return_types)
+    private function logInconsistentReturnType(AnalyzedFunction $analyzed_function, array $return_types): void
     {
         $used_type_names = [];
         foreach ($return_types as $type) {
@@ -687,9 +690,9 @@ class ProjectAnalyzer
         $this->logger->warning(
             "RETURN_TYPE: Inconsistent return types for function '{fqcn}::{function}': {types}.",
             [
-                'fqcn' => $analyzed_function->getClass()->getFqcn(),
+                'fqcn'     => $analyzed_function->getClass()->getFqcn(),
                 'function' => $analyzed_function->getFunctionName(),
-                'types' => implode(', ', $used_type_names),
+                'types'    => implode(', ', $used_type_names),
             ]
         );
     }
@@ -698,7 +701,7 @@ class ProjectAnalyzer
      * @param AnalyzedFunction $analyzed_function
      * @param AnalyzedClass[] $parents
      */
-    private function logImmutableParent(AnalyzedFunction $analyzed_function, array $parents)
+    private function logImmutableParent(AnalyzedFunction $analyzed_function, array $parents): void
     {
         $parent_classes = [];
         foreach ($parents as $parent) {
@@ -709,9 +712,9 @@ class ProjectAnalyzer
             "IMMUTABLE_FUNCTION: Cannot modify '{fqcn}::{function}' because the function inherits" .
             ' from one or more vendor or ignored classes: {parents}',
             [
-                'fqcn' => $analyzed_function->getClass()->getFqcn(),
+                'fqcn'     => $analyzed_function->getClass()->getFqcn(),
                 'function' => $analyzed_function->getFunctionName(),
-                'parents' => implode(', ', $parent_classes),
+                'parents'  => implode(', ', $parent_classes),
             ]
         );
     }
@@ -729,17 +732,17 @@ class ProjectAnalyzer
         string $parent_return = null,
         string $child_fqcn,
         string $child_return = null
-    ) {
+    ): void {
         $this->logger->warning(
             "RETURN_TYPE_COVARIANCE: Cannot add return type to parent class '{parent_fqcn}::" .
             "{function}' due to its child '{child_fqcn}::{function}' returning different types. " .
             "Parent returns: '{parent_type}', child returns: '{child_type}'",
             [
-                'function' => $function_name,
+                'function'    => $function_name,
                 'parent_fqcn' => $parent_fqcn,
                 'parent_type' => $parent_return,
-                'child_fqcn' => $child_fqcn,
-                'child_type' => $child_return,
+                'child_fqcn'  => $child_fqcn,
+                'child_type'  => $child_return,
             ]
         );
     }
@@ -749,15 +752,15 @@ class ProjectAnalyzer
      * @param string $function_name
      * @param int $arg_nr
      */
-    private function logUnresolvableParentTypeHint(string $fqcn, string $function_name, int $arg_nr)
+    private function logUnresolvableParentTypeHint(string $fqcn, string $function_name, int $arg_nr): void
     {
         $this->logger->warning(
             "TYPE_HINT_COVARIANCE: Cannot add parameter type hints to '{fqcn}::{function}' (argument " .
             '{arg_nr}) and its children due to inconsistent parameters types.',
             [
-                'fqcn' => $fqcn,
+                'fqcn'     => $fqcn,
                 'function' => $function_name,
-                'arg_nr' => $arg_nr,
+                'arg_nr'   => $arg_nr,
             ]
         );
     }
@@ -775,15 +778,15 @@ class ProjectAnalyzer
         string $child_return = null,
         string $parent_fqcn,
         string $parent_return = null
-    ) {
+    ): void {
         $this->logger->warning(
             "RETURN_TYPE_COVARIANCE: Cannot add return type to child class '{child_fqcn}::" .
             "{function}' due to it not being compatible with its parent '{parent_fqcn}::" .
             "{function}' return type. Child returns: '{child_type}', parent returns: '{parent_type}'",
             [
-                'function' => $function_name,
-                'child_fqcn' => $child_fqcn,
-                'child_type' => $child_return,
+                'function'    => $function_name,
+                'child_fqcn'  => $child_fqcn,
+                'child_type'  => $child_return,
                 'parent_fqcn' => $parent_fqcn,
                 'parent_type' => $parent_return,
             ]
@@ -795,7 +798,7 @@ class ProjectAnalyzer
      *
      * @param FunctionAnalyzerInterface $analyzer
      */
-    public function addAnalyzer(FunctionAnalyzerInterface $analyzer)
+    public function addAnalyzer(FunctionAnalyzerInterface $analyzer): void
     {
         $this->analyzers[] = $analyzer;
     }
@@ -803,7 +806,7 @@ class ProjectAnalyzer
     /**
      * @param LoggerInterface $logger
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }

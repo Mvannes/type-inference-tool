@@ -18,7 +18,7 @@ class UnresolvablePhpTypeTest extends TestCase
      * @param string $type_name
      * @param string $message
      */
-    public function testUnresolvablePhpTypeIsCorrectType(string $type_name, string $message)
+    public function testUnresolvablePhpTypeIsCorrectType(string $type_name, string $message): void
     {
         $php_type = new UnresolvablePhpType($type_name, $message);
         self::assertContains($type_name, $php_type->getName());
@@ -30,7 +30,7 @@ class UnresolvablePhpTypeTest extends TestCase
         self::assertTrue($php_type->isNullable());
     }
 
-    public function testUnresolvablePhpTypeThrowsErrorWhenIncorrectType()
+    public function testUnresolvablePhpTypeThrowsErrorWhenIncorrectType(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         new UnresolvablePhpType('SomeInvalidType');
@@ -41,8 +41,10 @@ class UnresolvablePhpTypeTest extends TestCase
      * @param PhpTypeInterface $type
      * @param bool $is_nullable
      */
-    public function testWhenUnresolvablePhpTypeHasTypeNoneThenItIsNullable(PhpTypeInterface $type, bool $is_nullable)
-    {
+    public function testWhenUnresolvablePhpTypeHasTypeNoneThenItIsNullable(
+        PhpTypeInterface $type,
+        bool $is_nullable
+    ): void {
         self::assertSame($is_nullable, UnresolvablePhpType::isPhpTypeNullable($type));
     }
 

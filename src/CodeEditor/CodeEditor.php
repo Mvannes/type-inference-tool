@@ -38,7 +38,7 @@ class CodeEditor
      * @param string $target_project
      * @param bool $overwrite_files
      */
-    public function applyInstructions(string $target_project, bool $overwrite_files = true)
+    public function applyInstructions(string $target_project, bool $overwrite_files = true): void
     {
         foreach ($this->instructions as $instruction) {
             if (!$instruction->apply($target_project, $this->diff_handler, $overwrite_files)) {
@@ -62,7 +62,7 @@ class CodeEditor
     /**
      * @param AbstractInstruction[] $instructions
      */
-    public function setInstructions(array $instructions)
+    public function setInstructions(array $instructions): void
     {
         $this->instructions = $instructions;
     }
@@ -73,7 +73,7 @@ class CodeEditor
      *
      * @param callable $handler
      */
-    public function setDiffHandler(callable $handler)
+    public function setDiffHandler(callable $handler): void
     {
         $this->diff_handler = $handler;
     }

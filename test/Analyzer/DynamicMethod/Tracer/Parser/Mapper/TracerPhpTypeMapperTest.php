@@ -20,7 +20,7 @@ class TracerPhpTypeMapperTest extends TestCase
     /**
      * @dataProvider tracerPhpTypeProvider
      */
-    public function testMapTraceTypeToPhpType(string $trace_type, PhpTypeInterface $php_type)
+    public function testMapTraceTypeToPhpType(string $trace_type, PhpTypeInterface $php_type): void
     {
         self::assertEquals($php_type, TracerPhpTypeMapper::toPhpType($trace_type));
     }
@@ -28,12 +28,12 @@ class TracerPhpTypeMapperTest extends TestCase
     /**
      * @dataProvider tracerFunctionNameProvider
      */
-    public function testExtractTraceFunctionName(string $trace_function_name, array $result)
+    public function testExtractTraceFunctionName(string $trace_function_name, array $result): void
     {
         self::assertSame($result, TracerPhpTypeMapper::extractTraceFunctionName($trace_function_name));
     }
 
-    public function tracerFunctionNameProvider()
+    public function tracerFunctionNameProvider(): iterable
     {
         return [
             ['Hostnet\\Example\\SomeClass->SomeFunction', ['Hostnet\\Example', 'SomeClass', 'SomeFunction']],
@@ -52,7 +52,7 @@ class TracerPhpTypeMapperTest extends TestCase
         ];
     }
 
-    public function tracerPhpTypeProvider()
+    public function tracerPhpTypeProvider(): iterable
     {
         return [
             ['long', new ScalarPhpType(ScalarPhpType::TYPE_INT)],

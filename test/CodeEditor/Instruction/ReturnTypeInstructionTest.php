@@ -32,7 +32,7 @@ class ReturnTypeInstructionTest extends TestCase
     private $project_expected = '/ExampleReturnTypes/ExampleProject-expected';
     private $example_class    = '/src/ExampleClass.php';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fixtures_dir = dirname(__DIR__, 2) . '/Fixtures';
 
@@ -43,12 +43,12 @@ class ReturnTypeInstructionTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->fs->remove([$this->fixtures_dir . $this->target_project . $this->example_class]);
     }
 
-    public function testInstructionShouldAddAReturnTypeToFunctionDeclaration()
+    public function testInstructionShouldAddAReturnTypeToFunctionDeclaration(): void
     {
         $class       = new AnalyzedClass('ExampleProject\\Component', 'ExampleClass', '', null, [], []);
         $type_string = new ScalarPhpType(ScalarPhpType::TYPE_STRING);
@@ -72,7 +72,7 @@ class ReturnTypeInstructionTest extends TestCase
         );
     }
 
-    public function testInstructionShouldNotBeAppliedWhenTargetNotFound()
+    public function testInstructionShouldNotBeAppliedWhenTargetNotFound(): void
     {
         $type_float = new ScalarPhpType(ScalarPhpType::TYPE_FLOAT);
 
@@ -88,7 +88,7 @@ class ReturnTypeInstructionTest extends TestCase
         );
     }
 
-    public function testInstructionShouldFailWhenFileNotInTargetProject()
+    public function testInstructionShouldFailWhenFileNotInTargetProject(): void
     {
         $class       = new AnalyzedClass('ExampleProject\\Component', 'ExampleClass', '', null, [], []);
         $return_type = new ScalarPhpType(ScalarPhpType::TYPE_STRING);
@@ -97,7 +97,7 @@ class ReturnTypeInstructionTest extends TestCase
         self::assertFalse($instruction->apply($this->fixtures_dir . $this->project_expected));
     }
 
-    public function testApplyWithDiffHandlerShouldInvokeCallback()
+    public function testApplyWithDiffHandlerShouldInvokeCallback(): void
     {
         $file        = $this->fixtures_dir . $this->target_project . $this->example_class;
         $class       = new AnalyzedClass('ExampleProject\\Component', 'ExampleClass', $file, null, [], []);
@@ -107,7 +107,15 @@ class ReturnTypeInstructionTest extends TestCase
         $before      = '';
         $after       = '';
         $edited_path = '';
-        $handler     = function (string $original, string $new, string $path) use (&$before, &$after, &$edited_path) {
+        $handler     = function (
+            string $original,
+            string $new,
+            string $path
+        ) use (
+            &$before,
+            &$after,
+            &$edited_path
+): void {
             $before      = $original;
             $after       = $new;
             $edited_path = $path;
@@ -119,7 +127,7 @@ class ReturnTypeInstructionTest extends TestCase
         self::assertSame($file, $edited_path);
     }
 
-    public function testApplyWithoutOverwritingShouldNotUpdateActualFiles()
+    public function testApplyWithoutOverwritingShouldNotUpdateActualFiles(): void
     {
         $file        = $this->fixtures_dir . $this->target_project . $this->example_class;
         $class       = new AnalyzedClass('ExampleProject\\Component', 'ExampleClass', $file, null, [], []);

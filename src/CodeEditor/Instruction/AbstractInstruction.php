@@ -104,7 +104,7 @@ abstract class AbstractInstruction
      * @param bool $overwrite_file
      * @throws IOException
      */
-    protected function saveFile(CodeEditorFile $file, callable $diff_handler = null, bool $overwrite_file)
+    protected function saveFile(CodeEditorFile $file, callable $diff_handler = null, bool $overwrite_file): void
     {
         if ($diff_handler !== null) {
             $diff_handler(

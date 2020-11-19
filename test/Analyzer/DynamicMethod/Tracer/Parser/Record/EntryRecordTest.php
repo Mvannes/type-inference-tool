@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class EntryRecordTest extends TestCase
 {
-    public function testEntryRecordHasCorrectProperties()
+    public function testEntryRecordHasCorrectProperties(): void
     {
         $function_nr     = 1;
         $function_name   = 'functionName';

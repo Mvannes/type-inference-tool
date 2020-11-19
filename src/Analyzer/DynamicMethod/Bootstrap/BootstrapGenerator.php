@@ -15,7 +15,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class BootstrapGenerator
 {
-    const TRACE_FILE_NAME = 'trace_results';
+    public const TRACE_FILE_NAME = 'trace_results';
 
     /**
      * @var Filesystem
@@ -42,7 +42,7 @@ class BootstrapGenerator
         string $output_dir,
         string $output_file,
         string $trace_file_name = self::TRACE_FILE_NAME
-    ) {
+    ): void {
         $bootstrap = <<<'PHP'
 <?php
 

@@ -16,19 +16,18 @@ use Hostnet\Component\TypeInference\Analyzer\Data\Type\UnresolvablePhpType;
  */
 class TracerPhpTypeMapper
 {
-    const NAMESPACE_GLOBAL  = '';
-    const TYPE_UNKNOWN      = 'unknown';
-    const CLASS_PREFIX      = 'class';
-    const TYPE_ARRAY        = 'array';
-    const TYPE_VARIADIC     = '...';
-    const FUNCTION_CLOSURE  = '{closure}';
-    const REGEX_TO_TYPE_MAP = [
-        '/^string(\(\d+\))?|String/' => 'string',
-        '/array(\(\d+\))?/' => 'array',
+    public const NAMESPACE_GLOBAL   = '';
+    public const TYPE_ARRAY         = 'array';
+    public const TYPE_UNKNOWN       = 'unknown';
+    private const TYPE_VARIADIC     = '...';
+    public const FUNCTION_CLOSURE   = '{closure}';
+    private const REGEX_TO_TYPE_MAP = [
+        '/^string(\(\d+\))?|String/'           => 'string',
+        '/array(\(\d+\))?/'                    => 'array',
         '/\{closure\}|class Closure|callable/' => 'callable',
-        '/true|false|bool|boolean/i' => 'bool',
-        '/long|int|integer/' => 'int',
-        '/double|float|number/' => 'float',
+        '/true|false|bool|boolean/i'           => 'bool',
+        '/long|int|integer/'                   => 'int',
+        '/double|float|number/'                => 'float',
     ];
 
     /**

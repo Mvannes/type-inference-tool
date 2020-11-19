@@ -38,7 +38,7 @@ class AnalyzedClassTest extends TestCase
      */
     private $example_class;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->example_class = new AnalyzedClass(
             $this->namespace,
@@ -50,7 +50,7 @@ class AnalyzedClassTest extends TestCase
         );
     }
 
-    public function testAnalyzedClassContainsCorrectData()
+    public function testAnalyzedClassContainsCorrectData(): void
     {
         self::assertSame($this->namespace, $this->example_class->getNamespace());
         self::assertSame($this->class_name, $this->example_class->getClassName());
@@ -59,7 +59,7 @@ class AnalyzedClassTest extends TestCase
         self::assertSame($this->methods, $this->example_class->getMethods());
     }
 
-    public function testRetrieveAllParentTypes()
+    public function testRetrieveAllParentTypes(): void
     {
         $namespace  = 'Just\\Some\\Namespace';
         $extends_1  = new AnalyzedClass($namespace, 'AbstractClass1', '', null, [], []);
@@ -84,7 +84,7 @@ class AnalyzedClassTest extends TestCase
         self::assertContains($interface, $parent_classes);
     }
 
-    public function testAnalyzedClassHasCorrectFullyQualifiedName()
+    public function testAnalyzedClassHasCorrectFullyQualifiedName(): void
     {
         $namespace  = 'Just\\Some\\Namespace';
         $class_name = 'ClassName';
@@ -95,7 +95,7 @@ class AnalyzedClassTest extends TestCase
         self::assertSame($class_name, $class->getClassName());
     }
 
-    public function testGetMatchingAnalyzedClassesFromTwoLists()
+    public function testGetMatchingAnalyzedClassesFromTwoLists(): void
     {
         $non_matching_class_1 = new AnalyzedClass('Namespace', 'Class1', '', null, []);
         $non_matching_class_2 = new AnalyzedClass('Namespace', 'Class2', '', null, []);
@@ -112,7 +112,7 @@ class AnalyzedClassTest extends TestCase
         self::assertContains($matching_class_2, $matches);
     }
 
-    public function testAddMethodShouldAppendNonExistingMethods()
+    public function testAddMethodShouldAppendNonExistingMethods(): void
     {
         $function_1 = 'Function1';
         $function_2 = 'Function2';
@@ -131,7 +131,7 @@ class AnalyzedClassTest extends TestCase
         self::assertContains($function_2, $methods);
     }
 
-    public function testComposeAnalyzedClassBySettersShouldHaveCorrectValues()
+    public function testComposeAnalyzedClassBySettersShouldHaveCorrectValues(): void
     {
         $extended_class    = new AnalyzedClass('Namespace', 'AbstractClass', '/file0.php');
         $implemented_class = new AnalyzedClass('Namespace', 'ClassInterface', '/file1.php');
@@ -154,7 +154,7 @@ class AnalyzedClassTest extends TestCase
         self::assertEquals($expected, $analyzed_class);
     }
 
-    public function testAddImplementedClassShouldOverwriteExistingImplementedClass()
+    public function testAddImplementedClassShouldOverwriteExistingImplementedClass(): void
     {
         $analyzed_class = new AnalyzedClass('Namespace', 'ClassName', 'File.php', null, [], []);
         $analyzed_class->addImplementedClass(new AnalyzedClass('Namespace', 'ClassInterface'));

@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AnalyzedReturnTest extends TestCase
 {
-    public function testAnalyzedReturnHasCorrectReturnType()
+    public function testAnalyzedReturnHasCorrectReturnType(): void
     {
         $php_type        = new NonScalarPhpType('ns', 'SomeObject', '', null, []);
         $analyzed_return = new AnalyzedReturn($php_type);
@@ -24,7 +24,7 @@ class AnalyzedReturnTest extends TestCase
         self::assertSame($php_type->getName(), $analyzed_return->getType()->getName());
     }
 
-    public function testRemoveAnalyzedReturnsDuplicatesRemovesDuplicates()
+    public function testRemoveAnalyzedReturnsDuplicatesRemovesDuplicates(): void
     {
         $analyzed_returns = [
             new AnalyzedReturn(new ScalarPhpType(ScalarPhpType::TYPE_STRING)),

@@ -44,7 +44,7 @@ class ProjectAnalyzerTest extends TestCase
      */
     private $analyzed_function;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->project_analyzer  = new ProjectAnalyzer(null, [ProjectAnalyzer::VENDOR_FOLDER]);
         $this->analyzed_function = new AnalyzedFunction(
@@ -53,7 +53,7 @@ class ProjectAnalyzerTest extends TestCase
         );
     }
 
-    public function testAnalyseShouldNotGenerateInstructionsWithoutAnalyzers()
+    public function testAnalyseShouldNotGenerateInstructionsWithoutAnalyzers(): void
     {
         self::assertEmpty($this->project_analyzer->analyse($this->target_project));
     }
@@ -68,7 +68,7 @@ class ProjectAnalyzerTest extends TestCase
         int $generated_instructions,
         array $types,
         AnalyzedFunction $analyzed_function = null
-    ) {
+    ): void {
         if ($analyzed_function === null) {
             $analyzed_function = $this->analyzed_function;
         }
@@ -93,7 +93,7 @@ class ProjectAnalyzerTest extends TestCase
         int $generated_instructions,
         array $types,
         AnalyzedFunction $analyzed_function = null
-    ) {
+    ): void {
         if ($analyzed_function === null) {
             $analyzed_function = $this->analyzed_function;
         }
@@ -108,7 +108,7 @@ class ProjectAnalyzerTest extends TestCase
         self::assertCount($generated_instructions, $instructions);
     }
 
-    public function testGenerateTypeHintInstructionForFunctionWithParentDefinitionShouldModifyParent()
+    public function testGenerateTypeHintInstructionForFunctionWithParentDefinitionShouldModifyParent(): void
     {
         $type_int          = new ScalarPhpType(ScalarPhpType::TYPE_INT);
         $interface         = new AnalyzedClass('Namespace', 'SomeClassInterface', 'file2.php', null, [], ['foobar']);
@@ -128,7 +128,7 @@ class ProjectAnalyzerTest extends TestCase
         self::assertContains($expected_class_instruction, $instructions, '', false, false);
     }
 
-    public function testDoNotGenerateReturnTypeInstructionsWhenTypeNotSameAsParent()
+    public function testDoNotGenerateReturnTypeInstructionsWhenTypeNotSameAsParent(): void
     {
         $interface        = new AnalyzedClass('Namespace', 'SomeClassInterface', 'file1.php', null, [], ['foobar']);
         $interface_method = new AnalyzedFunction($interface, 'foobar', ScalarPhpType::TYPE_STRING, true);
@@ -143,7 +143,7 @@ class ProjectAnalyzerTest extends TestCase
         self::assertEmpty($instructions);
     }
 
-    public function testWhenParentFunctionHasLessParamsThanChildThenSkipCovarianceCheckForThatParam()
+    public function testWhenParentFunctionHasLessParamsThanChildThenSkipCovarianceCheckForThatParam(): void
     {
         $interface        = new AnalyzedClass('Namespace', 'SomeClassInterface', 'file1.php', null, [], ['foobar']);
         $interface_method = new AnalyzedFunction(
@@ -170,7 +170,7 @@ class ProjectAnalyzerTest extends TestCase
         self::assertEmpty($instructions);
     }
 
-    public function testDoNotGenerateParentInstructionWhenChildrenReturnDifferentReturnTypes()
+    public function testDoNotGenerateParentInstructionWhenChildrenReturnDifferentReturnTypes(): void
     {
         $type_bool   = new ScalarPhpType(ScalarPhpType::TYPE_BOOL);
         $type_string = new ScalarPhpType(ScalarPhpType::TYPE_STRING);
@@ -197,7 +197,7 @@ class ProjectAnalyzerTest extends TestCase
         self::assertContains($expected_instruction_2, $instructions, '', false, false);
     }
 
-    public function testWhenParentHasNoReturnTypeOnlyChildrenWithResolvableReturnTypeShouldHaveDeclaration()
+    public function testWhenParentHasNoReturnTypeOnlyChildrenWithResolvableReturnTypeShouldHaveDeclaration(): void
     {
         $interface        = new AnalyzedClass('Namespace', 'FooInterface', '/file0.php', null, [], ['bar']);
         $interface_method = new AnalyzedFunction($interface, 'bar');
@@ -219,7 +219,7 @@ class ProjectAnalyzerTest extends TestCase
          self::assertSame('Namespace\\FooImpl1', $instructions[0]->getTargetClass()->getFqcn());
     }
 
-    public function testGenerateReturnTypeInstructionsWhenReturnTypeSameAsParent()
+    public function testGenerateReturnTypeInstructionsWhenReturnTypeSameAsParent(): void
     {
         $type_string = new ScalarPhpType(ScalarPhpType::TYPE_STRING);
 
@@ -241,7 +241,7 @@ class ProjectAnalyzerTest extends TestCase
         self::assertContains($expected_child_class_instruction, $instructions, '', false, false);
     }
 
-    public function testDoNotGenerateParentAndChildrenTypeHintsWhenTheyAreDifferent()
+    public function testDoNotGenerateParentAndChildrenTypeHintsWhenTheyAreDifferent(): void
     {
         $type_string = new ScalarPhpType(ScalarPhpType::TYPE_STRING);
         $type_int    = new ScalarPhpType(ScalarPhpType::TYPE_INT);
@@ -279,7 +279,7 @@ class ProjectAnalyzerTest extends TestCase
         self::assertNotContains($invalid_instruction_3, $instructions, '', false, false);
     }
 
-    public function testAnalyseFunctionWithLoggingEnabledShouldSaveLogs()
+    public function testAnalyseFunctionWithLoggingEnabledShouldSaveLogs(): void
     {
         $fs      = new Filesystem();
         $log_dir = dirname(__DIR__) . '/Fixtures/test-logs.log';
@@ -322,7 +322,7 @@ class ProjectAnalyzerTest extends TestCase
         self::assertContains('IMMUTABLE_FUNCTION', $logs);
     }
 
-    public function testWhenClassIsSubClassOfVendorThenDoNotAddTypeHintsToVendorClass()
+    public function testWhenClassIsSubClassOfVendorThenDoNotAddTypeHintsToVendorClass(): void
     {
         $target_project   = dirname(__DIR__) . '/Fixtures/ExampleDynamicAnalysis/Example-Project-1';
         $ignored_folders  = [ProjectAnalyzer::VENDOR_FOLDER];
@@ -344,7 +344,7 @@ class ProjectAnalyzerTest extends TestCase
         }
     }
 
-    public function testWhenMixedUsageBetweenNullAndSomeTypeThenAddNullableTypes()
+    public function testWhenMixedUsageBetweenNullAndSomeTypeThenAddNullableTypes(): void
     {
         $ignored_folders        = [ProjectAnalyzer::VENDOR_FOLDER];
         $target_project         = dirname(__DIR__) . '/Fixtures/ExampleDynamicAnalysis/Example-Project-2';
@@ -462,7 +462,7 @@ class ProjectAnalyzerTest extends TestCase
     /**
      * @param AnalyzedFunction[] $return
      */
-    private function addFunctionAnalyserMock(array $return)
+    private function addFunctionAnalyserMock(array $return): void
     {
         $analyzer = $this->createMock(FunctionAnalyzerInterface::class);
         $analyzer->method('collectAnalyzedFunctions')->willReturn($return);

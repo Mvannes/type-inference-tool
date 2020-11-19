@@ -18,7 +18,7 @@ class ScalarPhpTypeTest extends TestCase
      * @param string $type_name
      * @throws \InvalidArgumentException
      */
-    public function testScalarPhpTypeIsCorrectType(string $type_name)
+    public function testScalarPhpTypeIsCorrectType(string $type_name): void
     {
         $php_type = new ScalarPhpType($type_name);
         self::assertSame($type_name, $php_type->getName());
@@ -28,13 +28,13 @@ class ScalarPhpTypeTest extends TestCase
         self::assertTrue($php_type->isNullable());
     }
 
-    public function testScalarPhpTypeThrowsErrorWhenIncorrectType()
+    public function testScalarPhpTypeThrowsErrorWhenIncorrectType(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         new ScalarPhpType('SomeInvalidScalarType');
     }
 
-    public function correctScalarTypeNameDataProvider()
+    public function correctScalarTypeNameDataProvider(): iterable
     {
         return [
             [ScalarPhpType::TYPE_INT],

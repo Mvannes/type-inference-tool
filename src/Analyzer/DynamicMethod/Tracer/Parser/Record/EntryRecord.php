@@ -12,7 +12,7 @@ namespace Hostnet\Component\TypeInference\Analyzer\DynamicMethod\Tracer\Parser\R
  */
 final class EntryRecord extends AbstractRecord
 {
-    const FUNCTION_NAME_INDEX = 5;
+    public const FUNCTION_NAME_INDEX = 5;
 
     /**
      * @var string

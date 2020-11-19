@@ -21,9 +21,7 @@ use Symfony\Component\Finder\Finder;
  */
 class TraceParser
 {
-    const LOG_PREFIX         = 'TRACE_PARSER: ';
-    const ENTRY_RECORD_NAME  = 'entries';
-    const RETURN_RECORD_NAME = 'returns';
+    private const LOG_PREFIX = 'TRACE_PARSER: ';
 
     /**
      * @var string
@@ -98,7 +96,7 @@ class TraceParser
      *
      * @throws TraceNotFoundException
      */
-    public function parse()
+    public function parse(): void
     {
         $this->logger->debug(self::LOG_PREFIX . 'Started parsing generated trace...');
 
@@ -115,7 +113,7 @@ class TraceParser
      * Takes the list of string records and converts them to
      * a list of record objects.
      */
-    private function generateRecordList()
+    private function generateRecordList(): void
     {
         $this->generateFunctionLocationCache();
 
@@ -159,9 +157,9 @@ class TraceParser
      *
      * @see https://xdebug.org/docs/all_settings#trace_format
      * @param string $record_line
-     * @return AbstractRecord ReturnRecord|EntryRecord|ExitRecord
+     * @return AbstractRecord ReturnRecord|EntryRecord|ExitRecord|null
      */
-    private function createRecord(string $record_line)
+    private function createRecord(string $record_line): ?AbstractRecord
     {
         $record_fields        = explode("\t", $record_line);
         $amount_records_field = count($record_fields);
@@ -187,7 +185,7 @@ class TraceParser
 
             [$namespace,
                 $class_name,
-                $function_name] = TracerPhpTypeMapper::extractTraceFunctionName(
+                $function_name,] = TracerPhpTypeMapper::extractTraceFunctionName(
                     $record_fields[EntryRecord::FUNCTION_NAME_INDEX]
                 );
 
@@ -209,11 +207,11 @@ class TraceParser
             }
 
             $parameters = array_slice($record_fields, 11);
-            array_walk($parameters, function (&$param) {
+            array_walk($parameters, function (&$param): void {
                 $param = $this->extractProphecy($param);
             });
 
-            $entry_record =  new EntryRecord(
+            $entry_record = new EntryRecord(
                 (int) $record_fields[1],
                 $record_fields[EntryRecord::FUNCTION_NAME_INDEX],
                 ((int) $record_fields[6]) === 1,
@@ -261,7 +259,7 @@ class TraceParser
      *
      * @param string[] $record_fields Row from a trace file
      */
-    private function handleProphecyCreation(array $record_fields)
+    private function handleProphecyCreation(array $record_fields): void
     {
         if ($record_fields[EntryRecord::FUNCTION_NAME_INDEX] !== 'eval' ||
             strpos($record_fields[8], 'Prophecy/Doubler/Generator/ClassCreator.php') === false
@@ -277,7 +275,7 @@ class TraceParser
         $prophecy_implementations = explode(', ', $found_implements[1]);
 
         if (count($prophecy_implementations) > 2) {
-            $php_mapped_type                                =  array_pop($prophecy_implementations);
+            $php_mapped_type                                = array_pop($prophecy_implementations);
             $this->prophecy_namespaces[$prophecy_namespace] = ltrim($php_mapped_type, '\\');
             return;
         }
@@ -308,7 +306,7 @@ class TraceParser
      * file location. Used to quickly retrieve the file location of a specific
      * class.
      */
-    private function generateFunctionLocationCache()
+    private function generateFunctionLocationCache(): void
     {
         $this->logger->debug(self::LOG_PREFIX . 'Indexing target project files...');
 

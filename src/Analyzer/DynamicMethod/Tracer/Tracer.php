@@ -16,17 +16,17 @@ use Symfony\Component\Filesystem\Exception\IOException;
  */
 class Tracer
 {
-    const LOG_PREFIX            = 'TRACER: ';
-    const DEFAULT_TEST_FOLDER   = 'test';
-    const OUTPUT_FOLDER_NAME    = '/output/';
-    const OUTPUT_BOOTSTRAP_NAME = 'generated_autoload';
+    public const OUTPUT_FOLDER_NAME     = '/output/';
+    private const LOG_PREFIX            = 'TRACER: ';
+    private const DEFAULT_TEST_FOLDER   = 'test';
+    private const OUTPUT_BOOTSTRAP_NAME = 'generated_autoload';
 
     private $settings = [
-        'xdebug.collect_params' => '1',
-        'xdebug.collect_return' => '1',
+        'xdebug.collect_params'   => '1',
+        'xdebug.collect_return'   => '1',
         'xdebug.collect_includes' => '0',
-        'xdebug.coverage_enable' => '0',
-        'xdebug.extended_info' => '0',
+        'xdebug.coverage_enable'  => '0',
+        'xdebug.extended_info'    => '0',
     ];
 
     /**
@@ -88,7 +88,7 @@ class Tracer
      *
      * @throws IOException
      */
-    public function generateTrace()
+    public function generateTrace(): void
     {
         $this->createBootstrapFile($this->output_directory);
         $this->logger->debug(self::LOG_PREFIX . 'Started running target project unit tests...');
@@ -103,7 +103,7 @@ class Tracer
      * @param string $output_directory
      * @throws IOException
      */
-    private function createBootstrapFile(string $output_directory)
+    private function createBootstrapFile(string $output_directory): void
     {
         $bootstrap_generator = new BootstrapGenerator();
         $bootstrap_generator->generateBootstrap(

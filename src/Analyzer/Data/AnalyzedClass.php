@@ -120,7 +120,7 @@ class AnalyzedClass
      *
      * @param string $function_name
      */
-    public function addMethod(string $function_name)
+    public function addMethod(string $function_name): void
     {
         if (in_array($function_name, $this->methods, true)) {
             return;
@@ -136,7 +136,7 @@ class AnalyzedClass
      *
      * @param AnalyzedClass $implement
      */
-    public function addImplementedClass(AnalyzedClass $implement)
+    public function addImplementedClass(AnalyzedClass $implement): void
     {
         foreach ($this->implements as $i => $existing_implement) {
             if ($existing_implement->getFqcn() === $implement->getFqcn()) {
@@ -151,7 +151,7 @@ class AnalyzedClass
     /**
      * @return string|null
      */
-    public function getNamespace()
+    public function getNamespace(): ?string
     {
         return $this->namespace;
     }
@@ -159,7 +159,7 @@ class AnalyzedClass
     /**
      * @param string $namespace
      */
-    public function setNamespace(string $namespace)
+    public function setNamespace(string $namespace): void
     {
         $this->namespace = $namespace;
     }
@@ -175,7 +175,7 @@ class AnalyzedClass
     /**
      * @param string $class_name
      */
-    public function setClassName(string $class_name)
+    public function setClassName(string $class_name): void
     {
         $this->class_name = $class_name;
     }
@@ -183,7 +183,7 @@ class AnalyzedClass
     /**
      * @return AnalyzedClass|null
      */
-    public function getExtends()
+    public function getExtends(): ?AnalyzedClass
     {
         return $this->extends;
     }
@@ -191,7 +191,7 @@ class AnalyzedClass
     /**
      * @param AnalyzedClass $extends
      */
-    public function setExtends(AnalyzedClass $extends)
+    public function setExtends(AnalyzedClass $extends): void
     {
         $this->extends = $extends;
     }
@@ -207,7 +207,7 @@ class AnalyzedClass
     /**
      * @param AnalyzedClass[] $implements
      */
-    public function setImplements(array $implements)
+    public function setImplements(array $implements): void
     {
         $this->implements = $implements;
     }
@@ -231,7 +231,7 @@ class AnalyzedClass
     /**
      * @return string|null
      */
-    public function getFullPath()
+    public function getFullPath(): ?string
     {
         return $this->full_path;
     }
@@ -239,7 +239,7 @@ class AnalyzedClass
     /**
      * @param string $full_path
      */
-    public function setFullPath(string $full_path)
+    public function setFullPath(string $full_path): void
     {
         $this->full_path = $full_path;
     }

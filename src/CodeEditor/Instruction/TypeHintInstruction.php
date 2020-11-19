@@ -100,9 +100,9 @@ final class TypeHintInstruction extends AbstractInstruction
 
         $file->setContents($updated_file);
         $this->logger->debug('TYPE_HINT: Added {type} to parameter {param_nr} in {fqcn}::{function}', [
-            'type' => ($type->isNullable() ? '?' : '') . $type_representation,
+            'type'     => ($type->isNullable() ? '?' : '') . $type_representation,
             'param_nr' => $this->target_arg_number,
-            'fqcn' => $this->getTargetClass()->getFqcn(),
+            'fqcn'     => $this->getTargetClass()->getFqcn(),
             'function' => $this->getTargetFunctionName(),
         ]);
 

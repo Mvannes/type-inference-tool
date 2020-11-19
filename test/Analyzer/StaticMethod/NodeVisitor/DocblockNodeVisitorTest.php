@@ -75,7 +75,7 @@ class DocblockNodeVisitorTest extends TestCase
      */
     private $node_visitor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->createAbstractSyntaxTree();
         $this->file         = '/path/SomeFile.php';
@@ -94,7 +94,7 @@ class DocblockNodeVisitorTest extends TestCase
         ));
     }
 
-    public function testWhenDocBlockContainsParamAndReturnHintItShouldBeCollected()
+    public function testWhenDocBlockContainsParamAndReturnHintItShouldBeCollected(): void
     {
         $this->method_node->setDocComment(new Doc(<<<'php'
 /**
@@ -117,7 +117,7 @@ php
         );
     }
 
-    public function testWhenDocBlockDoesNotContainParamAndReturnHintThenNothingShouldBeAnalyzed()
+    public function testWhenDocBlockDoesNotContainParamAndReturnHintThenNothingShouldBeAnalyzed(): void
     {
         $this->traverseTree();
         $results = $this->collection->getAll();
@@ -127,7 +127,7 @@ php
         self::assertEmpty($results[0]->getCollectedReturns());
     }
 
-    public function testWhenDocBlockParamHasWrongNameItShouldNotBeAnalyzed()
+    public function testWhenDocBlockParamHasWrongNameItShouldNotBeAnalyzed(): void
     {
         $this->method_node->setDocComment(new Doc(<<<'php'
 /**
@@ -149,7 +149,7 @@ php
         );
     }
 
-    public function testWhenMethodHasDocblockWithParamHintsTheObjectNamespacesShouldBeResolved()
+    public function testWhenMethodHasDocblockWithParamHintsTheObjectNamespacesShouldBeResolved(): void
     {
         $fqcn = 'Hostnet\Component\SomeComponent\SomeClass';
 
@@ -180,8 +180,11 @@ php
     /**
      * @dataProvider docBlockReturnTypeProvider
      */
-    public function testDefinedReturnTypeFromDocBlockShouldBeAnalyzed(string $docblock, string $type, bool $is_nullable)
-    {
+    public function testDefinedReturnTypeFromDocBlockShouldBeAnalyzed(
+        string $docblock,
+        string $type,
+        bool $is_nullable
+    ): void {
         $this->method_node->setDocComment(new Doc($docblock));
 
         $this->traverseTree();
@@ -192,7 +195,7 @@ php
         self::assertEquals($is_nullable, $resulted_type->isNullable());
     }
 
-    public function testWhenNotImportedClassIsHintedThenDoNotCallItGlobally()
+    public function testWhenNotImportedClassIsHintedThenDoNotCallItGlobally(): void
     {
         $finder = (new Finder())->in(dirname(__DIR__, 3) . '/Fixtures/ExampleStaticAnalysis/Example-Project/');
 
@@ -208,7 +211,7 @@ php
         self::assertSame('ExampleStaticProject\SomeClass', $results[0]->getCollectedReturns()[0]->getType()->getName());
     }
 
-    public function testWhenDocBlockInheritsFromParentThenUseParentDocBlock()
+    public function testWhenDocBlockInheritsFromParentThenUseParentDocBlock(): void
     {
         $finder = (new Finder())->in(dirname(__DIR__, 3) . '/Fixtures/ExampleStaticAnalysis/Example-Project/');
 
@@ -251,14 +254,14 @@ php
 
         $this->namespace_node = new Namespace_(new Name(['ExampleStaticProject']), [$this->class_node], []);
         $this->class_node     = new Class_('SomeClass', [
-            'extends' => new Name(['AbstractSomeClass']),
+            'extends'    => new Name(['AbstractSomeClass']),
             'implements' => [],
-            'stmts' => [$this->method_node],
+            'stmts'      => [$this->method_node],
         ], []);
         $this->method_node    = new ClassMethod('doFoobar', [
             'params' => [new Param('number', new LNumber(5))],
-            'type' => 1,
-            'stmts' => [$this->return_node],
+            'type'   => 1,
+            'stmts'  => [$this->return_node],
         ], []);
 
         $this->method_node->setDocComment(new Doc('/** I inherit from my parent */'));
@@ -275,7 +278,7 @@ php
         );
     }
 
-    public function testWhenParentHasNoDocIsShouldNotBeAnalyzed()
+    public function testWhenParentHasNoDocIsShouldNotBeAnalyzed(): void
     {
         $collection = new AnalyzedFunctionCollection();
 
@@ -289,13 +292,13 @@ php
 
         $this->method_node = new ClassMethod('foobar', [
             'params' => [new Param('arg', new LNumber(5))],
-            'type' => 1,
-            'stmts' => [$this->return_node],
+            'type'   => 1,
+            'stmts'  => [$this->return_node],
         ], []);
         $this->class_node  = new Class_('ChildClass', [
-            'extends' => new Name(['ParentClass']),
+            'extends'    => new Name(['ParentClass']),
             'implements' => [],
-            'stmts' => [$this->method_node],
+            'stmts'      => [$this->method_node],
         ], []);
 
         $this->namespace_node = new Namespace_(new Name(['ExampleStaticProject']), [$this->class_node], []);
@@ -312,7 +315,7 @@ php
         self::assertEmpty($results[1]->getCollectedArguments());
     }
 
-    public function testWhenDocDefinedObjectButItDoesNotExistThenDoNotRetrieveParentDoc()
+    public function testWhenDocDefinedObjectButItDoesNotExistThenDoNotRetrieveParentDoc(): void
     {
         $doc_block = "/**\n * @return SomeObject\n */";
 
@@ -331,18 +334,18 @@ php
 
         $this->return_node    = new Return_(new String_('Hello'));
         $this->method_node    = new ClassMethod('foobar', [
-            'params' => [new Param('arg0', new ConstFetch(new Name('true')), 'bool')],
+            'params'     => [new Param('arg0', new ConstFetch(new Name('true')), 'bool')],
             'returnType' => 'string',
-            'type' => 1,
-            'stmts' => [$this->return_node],
+            'type'       => 1,
+            'stmts'      => [$this->return_node],
             'attributes' => [
                 'comments' => [new Doc('/** This is a doc block. */')],
             ],
         ], []);
         $this->class_node     = new Class_('SomeClass', [
-            'extends' => 'SomeClassParent',
+            'extends'    => 'SomeClassParent',
             'implements' => null,
-            'stmts' => [$this->method_node],
+            'stmts'      => [$this->method_node],
         ], []);
         $this->namespace_node = new Namespace_(new Name(['Just', 'Some', 'Ns']), [$this->class_node], []);
 
@@ -357,7 +360,7 @@ php
      * @param string $docblock
      * @dataProvider invalidSyntaxDocBlockProvider
      */
-    public function testWhenDocContainsInvalidReturnSyntaxThenDoNotAnalyse(string $docblock)
+    public function testWhenDocContainsInvalidReturnSyntaxThenDoNotAnalyse(string $docblock): void
     {
         $finder = (new Finder())->in(dirname(__DIR__, 3) . '/Fixtures/ExampleStaticAnalysis/Example-Project/');
 
@@ -414,27 +417,27 @@ php
      *     }
      * </pre>
      */
-    private function createAbstractSyntaxTree()
+    private function createAbstractSyntaxTree(): void
     {
         $this->return_node = new Return_(new String_('Hello'));
         $this->method_node = new ClassMethod('foobar', [
-            'params' => [new Param('arg0', new ConstFetch(new Name('true')), 'bool')],
+            'params'     => [new Param('arg0', new ConstFetch(new Name('true')), 'bool')],
             'returnType' => 'string',
-            'type' => 1,
-            'stmts' => [$this->return_node],
+            'type'       => 1,
+            'stmts'      => [$this->return_node],
         ], []);
 
         $this->class_node     = new Class_('SomeClass', [
-            'extends' => null,
+            'extends'    => null,
             'implements' => null,
-            'stmts' => [$this->method_node],
+            'stmts'      => [$this->method_node],
         ], []);
         $this->namespace_node = new Namespace_(new Name(['Just', 'Some', 'NamespaceName']), [$this->class_node], []);
 
         $this->abstract_syntax_tree = [$this->namespace_node];
     }
 
-    private function traverseTree()
+    private function traverseTree(): void
     {
         $this->node_visitor->beforeTraverse($this->abstract_syntax_tree);
         $this->node_visitor->enterNode($this->namespace_node);

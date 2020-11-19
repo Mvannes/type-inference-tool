@@ -11,11 +11,11 @@ namespace Hostnet\Component\TypeInference\Analyzer\Data\Type;
  */
 final class ScalarPhpType implements PhpTypeInterface
 {
-    const TYPE_INT     = 'int';
-    const TYPE_FLOAT   = 'float';
-    const TYPE_STRING  = 'string';
-    const TYPE_BOOL    = 'bool';
-    const SCALAR_TYPES = [self::TYPE_INT, self::TYPE_FLOAT, self::TYPE_STRING, self::TYPE_BOOL];
+    public const TYPE_INT     = 'int';
+    public const TYPE_FLOAT   = 'float';
+    public const TYPE_STRING  = 'string';
+    public const TYPE_BOOL    = 'bool';
+    public const SCALAR_TYPES = [self::TYPE_INT, self::TYPE_FLOAT, self::TYPE_STRING, self::TYPE_BOOL];
 
     /**
      * @var string
@@ -42,26 +42,17 @@ final class ScalarPhpType implements PhpTypeInterface
         $this->type        = $type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return $this->type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isNullable(): bool
     {
         return $this->is_nullable;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setNullable(bool $is_nullable)
+    public function setNullable(bool $is_nullable): void
     {
         $this->is_nullable = $is_nullable;
     }

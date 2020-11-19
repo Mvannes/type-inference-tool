@@ -44,7 +44,7 @@ class AnalyzedFunctionCollection implements \Iterator
      *
      * @param AnalyzedFunction[] $analyzed_functions
      */
-    public function addAll(array $analyzed_functions)
+    public function addAll(array $analyzed_functions): void
     {
         foreach ($analyzed_functions as $function) {
             $this->add($function);
@@ -56,7 +56,7 @@ class AnalyzedFunctionCollection implements \Iterator
      *
      * @param AnalyzedFunction $analyzed_function
      */
-    public function add(AnalyzedFunction $analyzed_function)
+    public function add(AnalyzedFunction $analyzed_function): void
     {
         $fqcn = $analyzed_function->getClass()->getFqcn();
 
@@ -88,7 +88,7 @@ class AnalyzedFunctionCollection implements \Iterator
      * function makes sure that the extended classes reference to the classes with
      * the full definition.
      */
-    private function referenceExtendedClasses()
+    private function referenceExtendedClasses(): void
     {
         foreach ($this->analyzed_functions as $analyzed_function) {
             $extended_class = $analyzed_function->getClass()->getExtends();
@@ -111,7 +111,7 @@ class AnalyzedFunctionCollection implements \Iterator
      * the class, they could be incomplete. This function makes sure that the
      * implemented classes point to the full class definition.
      */
-    private function referenceImplementedClasses()
+    private function referenceImplementedClasses(): void
     {
         foreach ($this->analyzed_functions as $analyzed_function) {
             foreach ($analyzed_function->getClass()->getImplements() as $i => $implemented_class) {
@@ -247,7 +247,7 @@ class AnalyzedFunctionCollection implements \Iterator
      *
      * @param AbstractInstruction[] $instructions
      */
-    public function applyInstructions(array $instructions)
+    public function applyInstructions(array $instructions): void
     {
         foreach ($instructions as $instruction) {
             if ($instruction instanceof ReturnTypeInstruction) {
@@ -270,7 +270,7 @@ class AnalyzedFunctionCollection implements \Iterator
      *
      * @param TypeHintInstruction $instruction
      */
-    private function applyTypeHintInstruction(TypeHintInstruction $instruction)
+    private function applyTypeHintInstruction(TypeHintInstruction $instruction): void
     {
         foreach ($this->analyzed_functions as $function) {
             $param_number = $instruction->getTargetArgNumber();
@@ -296,7 +296,7 @@ class AnalyzedFunctionCollection implements \Iterator
      *
      * @param ReturnTypeInstruction $instruction
      */
-    private function applyReturnTypeInstruction(ReturnTypeInstruction $instruction)
+    private function applyReturnTypeInstruction(ReturnTypeInstruction $instruction): void
     {
         foreach ($this->analyzed_functions as $function) {
             if ($function->hasReturnDeclaration()
@@ -317,7 +317,7 @@ class AnalyzedFunctionCollection implements \Iterator
      *
      * @param AnalyzedFunction $analyzed_function
      */
-    private function updateSharedClass(AnalyzedFunction $analyzed_function)
+    private function updateSharedClass(AnalyzedFunction $analyzed_function): void
     {
         $class        = $analyzed_function->getClass();
         $fqcn         = $class->getFqcn();
@@ -364,9 +364,6 @@ class AnalyzedFunctionCollection implements \Iterator
         return $this->position;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function valid(): bool
     {
         return isset($this->analyzed_functions[$this->position]);

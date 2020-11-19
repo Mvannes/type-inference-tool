@@ -20,12 +20,12 @@ class CodeEditorTest extends TestCase
     private $code_editor;
     private $target_project = 'just/some/project';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->code_editor = new CodeEditor();
     }
 
-    public function testGivenInstructionsAreAppliedToTargetProject()
+    public function testGivenInstructionsAreAppliedToTargetProject(): void
     {
         $instruction_0 = $this->createMock(AbstractInstruction::class);
         $instruction_0->expects($this->exactly(1))->method('apply')->with($this->target_project);
@@ -37,7 +37,7 @@ class CodeEditorTest extends TestCase
         $this->code_editor->applyInstructions($this->target_project);
     }
 
-    public function testGetAppliedInstructionsShouldReturnAllSucceededInstructions()
+    public function testGetAppliedInstructionsShouldReturnAllSucceededInstructions(): void
     {
         $instruction_success = $this->createMock(AbstractInstruction::class);
         $instruction_success->expects($this->exactly(1))
@@ -58,9 +58,9 @@ class CodeEditorTest extends TestCase
         self::assertCount(1, $success_instruction);
     }
 
-    public function testDiffHandlerShouldBePassedToInstructions()
+    public function testDiffHandlerShouldBePassedToInstructions(): void
     {
-        $handler = function () {
+        $handler = function (): void {
             // Some callback
         };
         $instruction = $this->createMock(AbstractInstruction::class);

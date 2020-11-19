@@ -40,7 +40,7 @@ class TraceParserTest extends TestCase
      */
     private $target_project;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storage        = new MemoryRecordStorage();
         $fixtures             = dirname(__DIR__, 4) . '/Fixtures/ExampleDynamicAnalysis';
@@ -63,7 +63,7 @@ class TraceParserTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (file_exists($this->tracer->getFullOutputTracePath())) {
             unlink($this->tracer->getFullOutputTracePath());
@@ -76,13 +76,13 @@ class TraceParserTest extends TestCase
         unlink($this->tracer->getFullOutputBootstrapPath());
     }
 
-    public function testParseValidTraceShouldGenerateAbstractRecords()
+    public function testParseValidTraceShouldGenerateAbstractRecords(): void
     {
         $this->trace_parser->parse();
         $entries = [];
 
         $this->storage->loopEntryRecords(
-            function (EntryRecord $entry, array $params, $return_type) use (&$entries, &$returns) {
+            function (EntryRecord $entry, array $params, $return_type) use (&$entries, &$returns): void {
                 $entries[] = $entry;
             }
         );
@@ -100,7 +100,7 @@ class TraceParserTest extends TestCase
         self::assertCount(99, $entries);
     }
 
-    public function testParseNonExistentTraceFile()
+    public function testParseNonExistentTraceFile(): void
     {
         $this->expectException(TraceNotFoundException::class);
         $this->trace_parser = new TraceParser($this->target_project, 'Some/invalid/path', $this->storage, [
@@ -109,7 +109,7 @@ class TraceParserTest extends TestCase
         $this->trace_parser->parse();
     }
 
-    public function testWhenUsingDatabaseStorageThenCommitToDatabase()
+    public function testWhenUsingDatabaseStorageThenCommitToDatabase(): void
     {
         $storage = $this->createMock(DatabaseRecordStorage::class);
         $storage->expects(self::exactly(1))->method('finishInsertion');

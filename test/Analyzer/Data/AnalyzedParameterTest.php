@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AnalyzedParameterTest extends TestCase
 {
-    public function testWhenCreatingAnalyzedParameterItShouldHaveCorrectProperties()
+    public function testWhenCreatingAnalyzedParameterItShouldHaveCorrectProperties(): void
     {
         $analyzed_parameter = new AnalyzedParameter();
 

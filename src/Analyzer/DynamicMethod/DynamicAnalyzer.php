@@ -34,7 +34,7 @@ final class DynamicAnalyzer implements FunctionAnalyzerInterface
      * Prefix used for logs outputted by this class. Name used
      * by stopwatch for this class.
      */
-    const TIMER_LOG_NAME = 'DYNAMIC_ANALYSIS';
+    private const TIMER_LOG_NAME = 'DYNAMIC_ANALYSIS';
 
     /**
      * @var string
@@ -136,7 +136,7 @@ final class DynamicAnalyzer implements FunctionAnalyzerInterface
      *
      * @param string $target_project
      */
-    private function generateTrace(string $target_project)
+    private function generateTrace(string $target_project): void
     {
         if ($this->existing_trace !== null) {
             return;
@@ -157,7 +157,7 @@ final class DynamicAnalyzer implements FunctionAnalyzerInterface
      *
      * @throws IOException
      */
-    private function removeGeneratedTraceFiles()
+    private function removeGeneratedTraceFiles(): void
     {
         if ($this->tracer === null) {
             return;
@@ -183,10 +183,10 @@ final class DynamicAnalyzer implements FunctionAnalyzerInterface
     {
         $collection = new AnalyzedFunctionCollection();
 
-        $this->storage->loopEntryRecords(function (EntryRecord $entry, array $params, $return) use ($collection) {
+        $this->storage->loopEntryRecords(function (EntryRecord $entry, array $params, $return) use ($collection): void {
             [$namespace,
                 $class_name,
-                $function_name] = TracerPhpTypeMapper::extractTraceFunctionName($entry->getFunctionName());
+                $function_name,] = TracerPhpTypeMapper::extractTraceFunctionName($entry->getFunctionName());
 
             $class    = new AnalyzedClass(
                 $namespace,

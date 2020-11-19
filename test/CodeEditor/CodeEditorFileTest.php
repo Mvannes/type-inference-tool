@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CodeEditorFileTest extends TestCase
 {
-    public function testFileContainsNewData()
+    public function testFileContainsNewData(): void
     {
         $path     = 'Just\\Some\\Path\\File.txt';
         $contents = 'Contents of the file';

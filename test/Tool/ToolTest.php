@@ -78,7 +78,7 @@ class ToolTest extends TestCase
      */
     private $log_dir;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->project_analyzer = $this->createMock(ProjectAnalyzer::class);
         $this->code_editor      = $this->createMock(CodeEditor::class);
@@ -92,13 +92,13 @@ class ToolTest extends TestCase
         $this->log_dir        = __DIR__ . '/output/logs' . uniqid('', false) . '.log';
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $fs = new Filesystem();
         $fs->remove($this->log_dir);
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$conn = new MysqlPersistentConnection();
 
@@ -113,12 +113,12 @@ class ToolTest extends TestCase
         self::$storage = new DatabaseRecordStorage(self::$db_config_file);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         unlink(self::$db_config_file);
     }
 
-    public function testExecuteWithTarget()
+    public function testExecuteWithTarget(): void
     {
         $this->project_analyzer->expects(self::exactly(2))->method('addAnalyzer');
         $this->project_analyzer->expects(self::exactly(1))->method('analyse')->willReturn([]);
@@ -131,7 +131,7 @@ class ToolTest extends TestCase
         self::assertContains('Applying generated instructions', $output);
     }
 
-    public function testExecuteAnalyzeOnlyWithTarget()
+    public function testExecuteAnalyzeOnlyWithTarget(): void
     {
         $this->code_editor
             ->expects(self::exactly(1))
@@ -140,7 +140,7 @@ class ToolTest extends TestCase
 
         $target_project = 'Some/Project/Directory';
         $this->command_tester->execute([
-            Tool::ARG_TARGET => $target_project,
+            Tool::ARG_TARGET                    => $target_project,
             '--' . Tool::OPTION_ANALYSE_ONLY[0] => true,
         ]);
         $output = $this->command_tester->getDisplay();
@@ -148,18 +148,18 @@ class ToolTest extends TestCase
         self::assertNotContains('Applying generated instructions', $output);
     }
 
-    public function testExecuteWithLoggingEnabled()
+    public function testExecuteWithLoggingEnabled(): void
     {
         $this->project_analyzer->expects(self::exactly(1))->method('setLogger');
         $this->command_tester->execute([
             Tool::ARG_TARGET                => 'Some/Project/Directory',
-            '--' . Tool::OPTION_LOG_FILE[0] =>  $this->log_dir,
+            '--' . Tool::OPTION_LOG_FILE[0] => $this->log_dir,
         ]);
 
         self::assertFileExists($this->log_dir);
     }
 
-    public function testExecutesShouldOutputCorrectResults()
+    public function testExecutesShouldOutputCorrectResults(): void
     {
         $class  = new AnalyzedClass('Namespace', 'SomeClass', 'project/some_class.php', null, []);
         $type   = new TypeHintInstruction($class, 'fn', 0, new ScalarPhpType(ScalarPhpType::TYPE_BOOL));
@@ -177,7 +177,7 @@ class ToolTest extends TestCase
         );
     }
 
-    public function testExecuteWithShowDiffsShouldHaveADiffSection()
+    public function testExecuteWithShowDiffsShouldHaveADiffSection(): void
     {
         $this->project_analyzer = new ProjectAnalyzer();
         $this->code_editor      = new CodeEditor();
@@ -189,10 +189,10 @@ class ToolTest extends TestCase
         $this->command        = $this->application->find(Tool::EXECUTE_COMMAND);
         $this->command_tester = new CommandTester($this->command);
         $this->log_dir        = __DIR__ . '/output/logs.log';
-
+        $tool_target          = dirname(__DIR__) . '/Fixtures/ExampleDynamicAnalysis/Example-Project-1/';
         $this->command_tester->execute([
-            Tool::ARG_TARGET => dirname(__DIR__) . '/Fixtures/ExampleDynamicAnalysis/Example-Project-1/',
-            '--' . Tool::OPTION_SHOW_DIFF[0] => true,
+            Tool::ARG_TARGET                    => $tool_target,
+            '--' . Tool::OPTION_SHOW_DIFF[0]    => true,
             '--' . Tool::OPTION_ANALYSE_ONLY[0] => true,
         ]);
         $output = $this->command_tester->getDisplay();
@@ -211,7 +211,7 @@ class ToolTest extends TestCase
     public function testWhenStorageTypeSetThenUseThatStorageType(
         string $storage_type,
         RecordStorageInterface $storage
-    ) {
+    ): void {
         $expected_analyzer = new DynamicAnalyzer($storage, [ProjectAnalyzer::VENDOR_FOLDER], new NullLogger());
         $this->project_analyzer
             ->expects(self::exactly(2))
@@ -222,7 +222,7 @@ class ToolTest extends TestCase
             );
 
         $this->command_tester->execute([
-            Tool::ARG_TARGET => 'Some/Project/Directory',
+            Tool::ARG_TARGET                    => 'Some/Project/Directory',
             '--' . Tool::OPTION_STORAGE_TYPE[0] => $storage_type,
         ]);
     }
@@ -231,17 +231,17 @@ class ToolTest extends TestCase
      * @dataProvider invalidRecordStorageProvider
      * @param string $storage_type
      */
-    public function testWhenInvalidStorageTypeIsSetItShouldThrowAnError(string $storage_type)
+    public function testWhenInvalidStorageTypeIsSetItShouldThrowAnError(string $storage_type): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
         $this->command_tester->execute([
-            Tool::ARG_TARGET => 'Some/Project/Directory',
+            Tool::ARG_TARGET                    => 'Some/Project/Directory',
             '--' . Tool::OPTION_STORAGE_TYPE[0] => $storage_type,
         ]);
     }
 
-    public function testWhenDatabaseStorageTypeIsSetThenUseDatabaseStorage()
+    public function testWhenDatabaseStorageTypeIsSetThenUseDatabaseStorage(): void
     {
         $this->project_analyzer
             ->expects(self::exactly(2))
@@ -257,13 +257,13 @@ class ToolTest extends TestCase
             );
 
         $this->command_tester->execute([
-            Tool::ARG_TARGET => 'Some/Project/Directory',
-            '--' . Tool::OPTION_STORAGE_TYPE[0] => Tool::STORAGE_TYPE_DATABASE,
+            Tool::ARG_TARGET                       => 'Some/Project/Directory',
+            '--' . Tool::OPTION_STORAGE_TYPE[0]    => Tool::STORAGE_TYPE_DATABASE,
             '--' . Tool::OPTION_DATABASE_CONFIG[0] => self::$db_config_file,
         ]);
     }
 
-    public function testWhenFolderIsMarkedAsIgnoredItShouldNotBeAnalyzed()
+    public function testWhenFolderIsMarkedAsIgnoredItShouldNotBeAnalyzed(): void
     {
         $this->project_analyzer = new ProjectAnalyzer();
         $this->code_editor      = new CodeEditor();
@@ -274,10 +274,10 @@ class ToolTest extends TestCase
 
         $this->command        = $this->application->find(Tool::EXECUTE_COMMAND);
         $this->command_tester = new CommandTester($this->command);
-
+        $tool_target          = dirname(__DIR__) . '/Fixtures/ExampleDynamicAnalysis/Example-Project-1/';
         $this->command_tester->execute([
-            Tool::ARG_TARGET => dirname(__DIR__) . '/Fixtures/ExampleDynamicAnalysis/Example-Project-1/',
-            '--' . Tool::OPTION_ANALYSE_ONLY[0] => true,
+            Tool::ARG_TARGET                      => $tool_target,
+            '--' . Tool::OPTION_ANALYSE_ONLY[0]   => true,
             '--' . Tool::OPTION_IGNORE_FOLDERS[0] => 'src',
         ]);
 

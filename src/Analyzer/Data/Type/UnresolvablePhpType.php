@@ -14,23 +14,23 @@ final class UnresolvablePhpType implements PhpTypeInterface
     /**
      * Used in case of invalid use of mixed types.
      */
-    const INCONSISTENT = 'inconsistent';
+    public const INCONSISTENT = 'inconsistent';
 
     /**
      * Used in case of optional parameter or no return statements.
      */
-    const NONE = 'none';
+    public const NONE = 'none';
 
     /**
      * Used in case of no type definition in a docblock.
      */
-    const DOCBLOCK = 'docblock';
+    public const DOCBLOCK = 'docblock';
 
     /**
      * Used in case of mixed type hints in a docblock.
      * E.g. the use of 'mixed' or '|' ('string|null').
      */
-    const DOCBLOCK_MULTIPLE = 'docblock_multiple';
+    public const DOCBLOCK_MULTIPLE = 'docblock_multiple';
 
     /**
      * @var string
@@ -91,7 +91,7 @@ final class UnresolvablePhpType implements PhpTypeInterface
     /**
      * @param bool $is_nullable
      */
-    public function setNullable(bool $is_nullable)
+    public function setNullable(bool $is_nullable): void
     {
         $this->is_nullable = $is_nullable;
     }

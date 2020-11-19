@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AnalyzedCallTest extends TestCase
 {
-    public function testAnalyzedCallHasCorrectArguments()
+    public function testAnalyzedCallHasCorrectArguments(): void
     {
         $argument_types = [
             new NonScalarPhpType('Namespace', 'SomeObject', '', null, []),

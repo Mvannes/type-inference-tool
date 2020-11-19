@@ -19,19 +19,19 @@ interface RecordStorageInterface
      *
      * @param EntryRecord $entry_record
      */
-    public function appendEntryRecord(EntryRecord $entry_record);
+    public function appendEntryRecord(EntryRecord $entry_record): void;
 
     /**
      * Appends an entry record to a collection of entry records.
      *
      * @param ReturnRecord $return_record
      */
-    public function appendReturnRecord(ReturnRecord $return_record);
+    public function appendReturnRecord(ReturnRecord $return_record): void;
 
     /**
      * Mark insertions as finished.
      */
-    public function finishInsertion();
+    public function finishInsertion(): void;
 
     /**
      * Loops all trace records and executes the given callback for each found
@@ -39,10 +39,10 @@ interface RecordStorageInterface
      *
      * @param callable $callback
      */
-    public function loopEntryRecords(callable $callback);
+    public function loopEntryRecords(callable $callback): void;
 
     /**
      * Deletes all records
      */
-    public function clearRecords();
+    public function clearRecords(): void;
 }

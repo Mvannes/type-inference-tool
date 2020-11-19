@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ReturnRecordTest extends TestCase
 {
-    public function testReturnRecordHasCorrectProperties()
+    public function testReturnRecordHasCorrectProperties(): void
     {
         $function_nr = 1;
         $return_type = 'string(10)';

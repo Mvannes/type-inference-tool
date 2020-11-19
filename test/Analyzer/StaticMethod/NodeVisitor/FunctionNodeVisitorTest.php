@@ -71,14 +71,14 @@ class FunctionNodeVisitorTest extends TestCase
      */
     private $node_visitor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->createAbstractSyntaxTree();
         $this->file         = '/path/SomeFile.php';
         $this->collection   = new AnalyzedFunctionCollection();
         $function_index     = [
             '\\\\AbstractSomeClass' => [
-                'path' => null,
+                'path'    => null,
                 'methods' => [],
                 'parents' => [],
             ],
@@ -86,7 +86,7 @@ class FunctionNodeVisitorTest extends TestCase
         $this->node_visitor = new FunctionNodeVisitor($this->collection, $this->file, $function_index);
     }
 
-    public function testBeforeTraverseShouldSetTheFileNameAndAddAnalyzedFunctionToCollection()
+    public function testBeforeTraverseShouldSetTheFileNameAndAddAnalyzedFunctionToCollection(): void
     {
         $this->traverseTree();
 
@@ -110,15 +110,15 @@ class FunctionNodeVisitorTest extends TestCase
         self::assertEquals($expected_function, $results[0]);
     }
 
-    public function testWhenExistingParameterIsNullableUseCorrectType()
+    public function testWhenExistingParameterIsNullableUseCorrectType(): void
     {
         $this->method_node = new ClassMethod('foobar', [
-            'params' => [
+            'params'     => [
                 new Param('arg0', null, new NullableType(ScalarPhpType::TYPE_STRING)),
             ],
             'returnType' => 'string',
-            'type' => 1,
-            'stmts' => [$this->return_node],
+            'type'       => 1,
+            'stmts'      => [$this->return_node],
         ], []);
         $this->traverseTree();
 
@@ -128,7 +128,7 @@ class FunctionNodeVisitorTest extends TestCase
         );
     }
 
-    public function testTraversalAfterNameResolverShouldUseFullyQualifiedClassNames()
+    public function testTraversalAfterNameResolverShouldUseFullyQualifiedClassNames(): void
     {
         $this->method_node->returnType = new FullyQualified(new Name(['Namespace', 'Object']));
 
@@ -140,17 +140,17 @@ class FunctionNodeVisitorTest extends TestCase
         self::assertSame('Namespace\Object', $results[0]->getDefinedReturnType());
     }
 
-    public function testWhenClassMethodHasDefaultParametersAndDocblockItShouldBeAnalyzed()
+    public function testWhenClassMethodHasDefaultParametersAndDocblockItShouldBeAnalyzed(): void
     {
         $docblock          = "/**\n * Docblock of this function\n */";
         $this->method_node = new ClassMethod('foobar', [
-            'params' => [
+            'params'     => [
                 new Param('arg0', new LNumber(66), new Name('int')),
                 new Param('arg0', new Node\Scalar\DNumber(10.6)),
             ],
             'returnType' => 'string',
-            'type' => 1,
-            'stmts' => [$this->return_node],
+            'type'       => 1,
+            'stmts'      => [$this->return_node],
         ], []);
         $this->method_node->setDocComment(new Doc($docblock));
 
@@ -164,15 +164,15 @@ class FunctionNodeVisitorTest extends TestCase
         self::assertSame($docblock, $results[0]->getDocblock()->toString());
     }
 
-    public function testWhenFunctionReturnsNullableThenUseCorrectType()
+    public function testWhenFunctionReturnsNullableThenUseCorrectType(): void
     {
         $this->method_node = new ClassMethod('foobar', [
-            'params' => [
+            'params'     => [
                 new Param('arg0', new ConstFetch(new Name('true')), 'bool'),
             ],
             'returnType' => new NullableType(new Name('SomeObject')),
-            'type' => 1,
-            'stmts' => [$this->return_node],
+            'type'       => 1,
+            'stmts'      => [$this->return_node],
         ], []);
 
         $this->traverseTree();
@@ -196,21 +196,21 @@ class FunctionNodeVisitorTest extends TestCase
      *     }
      * </pre>
      */
-    private function createAbstractSyntaxTree()
+    private function createAbstractSyntaxTree(): void
     {
         $this->return_node    = new Return_(new String_('Hello'));
         $this->method_node    = new ClassMethod('foobar', [
-            'params' => [
+            'params'     => [
                 new Param('arg0', new ConstFetch(new Name('true')), 'bool'),
             ],
             'returnType' => 'string',
-            'type' => 1,
-            'stmts' => [$this->return_node],
+            'type'       => 1,
+            'stmts'      => [$this->return_node],
         ], []);
         $this->class_node     = new Class_('SomeClass', [
-            'extends' => new Name(['AbstractSomeClass']),
+            'extends'    => new Name(['AbstractSomeClass']),
             'implements' => [new Name(['SomeClassInterface'])],
-            'stmts' => [
+            'stmts'      => [
                 $this->method_node,
             ],
         ], []);
@@ -219,7 +219,7 @@ class FunctionNodeVisitorTest extends TestCase
         $this->abstract_syntax_tree = [$this->namespace_node];
     }
 
-    private function traverseTree()
+    private function traverseTree(): void
     {
         $this->node_visitor->beforeTraverse($this->abstract_syntax_tree);
         $this->node_visitor->enterNode($this->namespace_node);

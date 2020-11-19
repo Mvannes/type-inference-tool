@@ -33,7 +33,7 @@ class MemoryRecordStorageTest extends TestCase
      */
     private $return_record;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storage       = new MemoryRecordStorage();
         $function_number     = 123;
@@ -41,48 +41,48 @@ class MemoryRecordStorageTest extends TestCase
         $this->return_record = new ReturnRecord($function_number, ScalarPhpType::TYPE_STRING);
     }
 
-    public function testAppendEntryRecordShouldAddAnEntryRecord()
+    public function testAppendEntryRecordShouldAddAnEntryRecord(): void
     {
         $this->storage->appendEntryRecord($this->entry_record);
         $this->storage->finishInsertion();
-        $this->storage->loopEntryRecords(function (EntryRecord $record, array $parameters, $return_type) {
+        $this->storage->loopEntryRecords(function (EntryRecord $record, array $parameters, $return_type): void {
             self::assertSame($this->entry_record, $record);
             self::assertSame($this->parameters, $parameters);
             self::assertNull($return_type);
         });
     }
 
-    public function testAppendReturnRecordShouldAddAReturnRecord()
+    public function testAppendReturnRecordShouldAddAReturnRecord(): void
     {
         $this->storage->appendEntryRecord($this->entry_record);
         $this->storage->appendReturnRecord($this->return_record);
-        $this->storage->loopEntryRecords(function (EntryRecord $record, array $parameters, $return_type) {
+        $this->storage->loopEntryRecords(function (EntryRecord $record, array $parameters, $return_type): void {
             self::assertSame($this->entry_record, $record);
             self::assertSame($this->parameters, $parameters);
             self::assertSame($this->return_record->getReturnType(), $return_type);
         });
     }
 
-    public function testWhenEntryRecordHasNoMatchingReturnRecordThenReturnTypeIsNull()
+    public function testWhenEntryRecordHasNoMatchingReturnRecordThenReturnTypeIsNull(): void
     {
         $this->storage->appendEntryRecord($this->entry_record);
 
         $this->return_record = new ReturnRecord(999, 'SomethingElse');
         $this->storage->appendReturnRecord($this->return_record);
 
-        $this->storage->loopEntryRecords(function (EntryRecord $record, array $parameters, $return_type) {
+        $this->storage->loopEntryRecords(function (EntryRecord $record, array $parameters, $return_type): void {
             self::assertNull($return_type);
         });
     }
 
-    public function testClearRecordsShouldRemoveAllAppendedRecords()
+    public function testClearRecordsShouldRemoveAllAppendedRecords(): void
     {
         $this->storage->appendEntryRecord($this->entry_record);
         $this->storage->appendReturnRecord($this->return_record);
         $this->storage->clearRecords();
 
         $count = 0;
-        $this->storage->loopEntryRecords(function () use (&$count) {
+        $this->storage->loopEntryRecords(function () use (&$count): void {
             $count++;
         });
 

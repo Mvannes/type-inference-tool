@@ -50,7 +50,7 @@ abstract class AbstractRecord
     /**
      * @param string $function_declaration_file
      */
-    public function setFunctionDeclarationFile(string $function_declaration_file)
+    public function setFunctionDeclarationFile(string $function_declaration_file): void
     {
         $this->function_declaration_file = $function_declaration_file;
     }

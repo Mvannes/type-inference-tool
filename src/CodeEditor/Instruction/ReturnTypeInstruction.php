@@ -100,8 +100,8 @@ final class ReturnTypeInstruction extends AbstractInstruction
 
         $file->setContents($updated_file);
         $this->logger->debug('RETURN_TYPE: Added {type} to {fqcn}::{function}', [
-            'type' => ($type->isNullable() ? '?' : '') . $type_representation,
-            'fqcn' => $this->getTargetClass()->getFqcn(),
+            'type'     => ($type->isNullable() ? '?' : '') . $type_representation,
+            'fqcn'     => $this->getTargetClass()->getFqcn(),
             'function' => $this->getTargetFunctionName(),
         ]);
 

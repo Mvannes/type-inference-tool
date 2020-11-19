@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class UnresolvableHintTest extends TestCase
 {
-    public function testCreatedUnresolvableHintShouldHoldTheCorrectProperties()
+    public function testCreatedUnresolvableHintShouldHoldTheCorrectProperties(): void
     {
         $function_name     = 'foobar';
         $class             = new AnalyzedClass('Namespace', 'SomeClass', 'File.php', null, [], [$function_name]);

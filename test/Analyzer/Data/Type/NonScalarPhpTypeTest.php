@@ -17,7 +17,7 @@ class NonScalarPhpTypeTest extends TestCase
     private $namespace  = 'Some\\Namespace';
     private $class_name = 'SomeClass';
 
-    public function testNonScalarTypeItsNameIsFqcn()
+    public function testNonScalarTypeItsNameIsFqcn(): void
     {
         $php_type = new NonScalarPhpType($this->namespace, $this->class_name, '', null, []);
 
@@ -28,7 +28,7 @@ class NonScalarPhpTypeTest extends TestCase
         self::assertTrue($php_type->isNullable());
     }
 
-    public function testAnalyzedClassToNonScalarTypeContainSameValues()
+    public function testAnalyzedClassToNonScalarTypeContainSameValues(): void
     {
         $extends        = new AnalyzedClass($this->namespace, 'AbstractClass', '', null, [], []);
         $implements     = [new AnalyzedClass($this->namespace, 'SomeInterface', '', null, [], [])];
@@ -40,7 +40,7 @@ class NonScalarPhpTypeTest extends TestCase
         self::assertSame($analyzed_class->getFqcn(), $php_type->getName());
     }
 
-    public function testGetCommonParentShouldReturnTheCommonParentOfMultipleClasses()
+    public function testGetCommonParentShouldReturnTheCommonParentOfMultipleClasses(): void
     {
         $parent    = new AnalyzedClass('Ns', 'AbstractClass', '', null, []);
         $interface = new AnalyzedClass('Ns', 'SomeInterface', '', $parent, []);
@@ -61,7 +61,7 @@ class NonScalarPhpTypeTest extends TestCase
         self::assertSame($common_parent->getName(), $parent->getFqcn());
     }
 
-    public function testGetCommonParentShouldByUnresolvedWhenNoCommonParent()
+    public function testGetCommonParentShouldByUnresolvedWhenNoCommonParent(): void
     {
         $return_types  = [
             new AnalyzedClass('Namespace', 'ClassA', '', null, []),
@@ -73,7 +73,7 @@ class NonScalarPhpTypeTest extends TestCase
         self::assertSame(UnresolvablePhpType::INCONSISTENT, $common_parent->getName());
     }
 
-    public function testGetCommonParentShouldBeUnresolvedWhenTypesContainUnresolvable()
+    public function testGetCommonParentShouldBeUnresolvedWhenTypesContainUnresolvable(): void
     {
         $return_types = [
             new AnalyzedClass('Namespace', 'SomeClass', '', null, []),
@@ -83,7 +83,7 @@ class NonScalarPhpTypeTest extends TestCase
         self::assertInstanceOf(UnresolvablePhpType::class, NonScalarPhpType::getCommonParent($return_types));
     }
 
-    public function testGetCommonParentShouldBeUnresolvedWhenContainingScalarAndNonScalarTypes()
+    public function testGetCommonParentShouldBeUnresolvedWhenContainingScalarAndNonScalarTypes(): void
     {
         $types = [
             new NonScalarPhpType(null, 'array', null, null, [], []),

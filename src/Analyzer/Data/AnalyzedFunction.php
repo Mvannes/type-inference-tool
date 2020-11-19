@@ -80,7 +80,7 @@ class AnalyzedFunction
      *
      * @param AnalyzedCall $call
      */
-    public function addCollectedArguments(AnalyzedCall $call)
+    public function addCollectedArguments(AnalyzedCall $call): void
     {
         $this->collected_arguments[] = $call;
     }
@@ -90,7 +90,7 @@ class AnalyzedFunction
      *
      * @param AnalyzedCall[] $calls
      */
-    public function addAllCollectedArguments(array $calls)
+    public function addAllCollectedArguments(array $calls): void
     {
         $this->collected_arguments = array_merge($this->collected_arguments, $calls);
     }
@@ -100,7 +100,7 @@ class AnalyzedFunction
      *
      * @param AnalyzedReturn $return
      */
-    public function addCollectedReturn(AnalyzedReturn $return)
+    public function addCollectedReturn(AnalyzedReturn $return): void
     {
         $this->collected_returns[] = $return;
     }
@@ -110,7 +110,7 @@ class AnalyzedFunction
      *
      * @param array $returns
      */
-    public function addAllCollectedReturns(array $returns)
+    public function addAllCollectedReturns(array $returns): void
     {
         $this->collected_returns = array_merge($this->collected_returns, $returns);
     }
@@ -150,7 +150,7 @@ class AnalyzedFunction
     /**
      * @return string|null
      */
-    public function getDefinedReturnType()
+    public function getDefinedReturnType(): ?string
     {
         return $this->defined_return_type;
     }
@@ -158,7 +158,7 @@ class AnalyzedFunction
     /**
      * @param string $defined_return_type
      */
-    public function setDefinedReturnType(string $defined_return_type)
+    public function setDefinedReturnType(string $defined_return_type): void
     {
         $this->defined_return_type = $defined_return_type;
     }
@@ -168,7 +168,7 @@ class AnalyzedFunction
      *
      * @param AnalyzedClass $class
      */
-    public function setClass(AnalyzedClass $class)
+    public function setClass(AnalyzedClass $class): void
     {
         $this->class = $class;
     }
@@ -192,7 +192,7 @@ class AnalyzedFunction
     /**
      * @param AnalyzedParameter[] $updated_parameters
      */
-    public function setDefinedParameters(array $updated_parameters)
+    public function setDefinedParameters(array $updated_parameters): void
     {
         $this->defined_parameters = $updated_parameters;
     }
@@ -200,7 +200,7 @@ class AnalyzedFunction
     /**
      * @return Docblock|null
      */
-    public function getDocblock()
+    public function getDocblock(): ?Docblock
     {
         return $this->docblock;
     }
@@ -208,7 +208,7 @@ class AnalyzedFunction
     /**
      * @param Docblock $docblock
      */
-    public function setDocblock(Docblock $docblock)
+    public function setDocblock(Docblock $docblock): void
     {
         $this->docblock = $docblock;
     }

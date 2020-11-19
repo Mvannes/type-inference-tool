@@ -40,26 +40,17 @@ final class NonScalarPhpType extends AnalyzedClass implements PhpTypeInterface
         $this->is_nullable = $is_nullable;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return $this->getFqcn();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isNullable(): bool
     {
         return $this->is_nullable;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setNullable(bool $is_nullable)
+    public function setNullable(bool $is_nullable): void
     {
         $this->is_nullable = $is_nullable;
     }

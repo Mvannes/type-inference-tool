@@ -34,7 +34,7 @@ class BootstrapGeneratorTest extends TestCase
      */
     private $outputted_file;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->file_system = new Filesystem();
         $this->fixtures    = dirname(__DIR__, 3) . '/Fixtures';
@@ -42,7 +42,7 @@ class BootstrapGeneratorTest extends TestCase
         $this->file_system->remove($this->output_dir);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->file_system->remove($this->outputted_file);
     }
@@ -51,7 +51,7 @@ class BootstrapGeneratorTest extends TestCase
      * @dataProvider projectLocationDataProvider
      * @param string $project
      */
-    public function testGenerateBootstrapShouldOutputTargetProjectBootstrap(string $project)
+    public function testGenerateBootstrapShouldOutputTargetProjectBootstrap(string $project): void
     {
         $project_dir = $this->fixtures . $project;
         $output_file = 'generated_bootstrap';
@@ -77,7 +77,7 @@ PHP
         self::assertStringEqualsFile($this->outputted_file, $expected);
     }
 
-    public function projectLocationDataProvider()
+    public function projectLocationDataProvider(): iterable
     {
         return [
             ['/ExampleDynamicAnalysis/Example-Project-1'],

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PhpAstConverterTest extends TestCase
 {
-    public function testConvertPhpCodeShouldOutputAnAbstractSyntaxTree()
+    public function testConvertPhpCodeShouldOutputAnAbstractSyntaxTree(): void
     {
         $php_ast_converter    = new PhpAstConverter();
         $abstract_syntax_tree = $php_ast_converter->convert('<?php $some_number = 123;');

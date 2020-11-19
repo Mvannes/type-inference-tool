@@ -23,12 +23,12 @@ class AnalyzedFunctionCollectionTest extends TestCase
      */
     private $collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collection = new AnalyzedFunctionCollection();
     }
 
-    public function testAddAllFunctionsShouldAddAllNonDuplicates()
+    public function testAddAllFunctionsShouldAddAllNonDuplicates(): void
     {
         $namespace     = 'Just\\Some\\Namespace';
         $class_name    = 'SomeClass';
@@ -56,7 +56,7 @@ class AnalyzedFunctionCollectionTest extends TestCase
         self::assertSame($class, $this->collection->getClass($namespace . '\\' . $class_name));
     }
 
-    public function testMethodsInClassShouldHaveSameClassObject()
+    public function testMethodsInClassShouldHaveSameClassObject(): void
     {
         $class_0 = new AnalyzedClass('Namespace', 'ClassName', 'Class.php', null, []);
         $class_1 = new AnalyzedClass('Namespace', 'ClassName', 'Class.php', null, []);
@@ -77,7 +77,7 @@ class AnalyzedFunctionCollectionTest extends TestCase
         self::assertCount(2, $this->collection->getAll());
     }
 
-    public function testAddAllShouldMergeAnalyzedFunctions()
+    public function testAddAllShouldMergeAnalyzedFunctions(): void
     {
         $extended             = new AnalyzedClass('Namespace', 'AbstractClassName', 'file2.php');
         $implemented          = new AnalyzedClass('Namespace', 'ClassNameInterface', 'file3.php');
@@ -103,7 +103,7 @@ class AnalyzedFunctionCollectionTest extends TestCase
         self::assertEquals($expected, $results);
     }
 
-    public function testApplyInstructionsShouldApplyInstructionsToAnalyzedFunctions()
+    public function testApplyInstructionsShouldApplyInstructionsToAnalyzedFunctions(): void
     {
         $class    = new AnalyzedClass('Namespace', 'ClassName', 'file.php', null, [], ['foobar']);
         $function = new AnalyzedFunction($class, 'foobar', null, false, [new AnalyzedParameter()]);
@@ -124,7 +124,7 @@ class AnalyzedFunctionCollectionTest extends TestCase
         );
     }
 
-    public function testGetFunctionChildrenShouldReturnAllChildClassesImplementingAFunction()
+    public function testGetFunctionChildrenShouldReturnAllChildClassesImplementingAFunction(): void
     {
         $parent_class = new AnalyzedClass('Namespace', 'ClazzInterface', 'File1.php', null, [], ['foobar']);
 
@@ -145,7 +145,7 @@ class AnalyzedFunctionCollectionTest extends TestCase
         self::assertSame($child, $parent_children[0]);
     }
 
-    public function testGetClassShouldRetrieveAnAnalyzedClassWithTheCorrectFqcn()
+    public function testGetClassShouldRetrieveAnAnalyzedClassWithTheCorrectFqcn(): void
     {
         $namespace  = 'Just\\Some\\Namespace';
         $class_name = 'ClassName';
@@ -158,7 +158,7 @@ class AnalyzedFunctionCollectionTest extends TestCase
         self::assertSame($class, $this->collection->getClass($namespace . '\\' . $class_name));
     }
 
-    public function testWhenGetClassIsCalledWithInvalidFqcnThenEntryShouldNotBeFound()
+    public function testWhenGetClassIsCalledWithInvalidFqcnThenEntryShouldNotBeFound(): void
     {
         $this->expectException(EntryNotFoundException::class);
         $this->collection->getClass('Non\\Existent::Class');

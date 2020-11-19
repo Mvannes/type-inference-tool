@@ -31,21 +31,21 @@ class DynamicAnalyzerTest extends TestCase
      */
     private $example_project_dir;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storage             = new MemoryRecordStorage();
         $this->analyzer            = new DynamicAnalyzer($this->storage, [ProjectAnalyzer::VENDOR_FOLDER]);
         $this->example_project_dir = dirname(__DIR__, 2) . '/Fixtures/ExampleDynamicAnalysis/Example-Project-1';
     }
 
-    public function testDynamicAnalyzerGeneratesAnalyzedFunctions()
+    public function testDynamicAnalyzerGeneratesAnalyzedFunctions(): void
     {
         $results = $this->analyzer->collectAnalyzedFunctions($this->example_project_dir);
 
         self::assertCount(39, $results);
 
         $count = 0;
-        $this->storage->loopEntryRecords(function () use (&$count) {
+        $this->storage->loopEntryRecords(function () use (&$count): void {
             $count++;
         });
         self::assertGreaterThan(0, $count);
@@ -53,14 +53,14 @@ class DynamicAnalyzerTest extends TestCase
         unset($this->analyzer);
 
         $count = 0;
-        $this->storage->loopEntryRecords(function () use (&$count) {
+        $this->storage->loopEntryRecords(function () use (&$count): void {
             $count++;
         });
 
         self::assertSame(0, $count);
     }
 
-    public function testWhenProvidingExistingTraceThenDoNotGenerateNewOne()
+    public function testWhenProvidingExistingTraceThenDoNotGenerateNewOne(): void
     {
         $this->analyzer = new DynamicAnalyzer(
             new MemoryRecordStorage(),

@@ -22,12 +22,12 @@ class StaticAnalyzerTest extends TestCase
      */
     private $example_project_directory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->example_project_directory = dirname(__DIR__, 2) . '/Fixtures/ExampleStaticAnalysis/Example-Project';
     }
 
-    public function testStaticAnalyzerGeneratesAnalyzedFunctions()
+    public function testStaticAnalyzerGeneratesAnalyzedFunctions(): void
     {
         $analyzer = new StaticAnalyzer([ProjectAnalyzer::VENDOR_FOLDER]);
         $results  = $analyzer->collectAnalyzedFunctions($this->example_project_directory);
@@ -79,26 +79,26 @@ class StaticAnalyzerTest extends TestCase
         self::assertContains($abstract_foo_foobar, $results, '', false, false);
     }
 
-    public function testListAllMethodsShouldRetrieveAllMethodNamesOfTheGivenClassAndItsParents()
+    public function testListAllMethodsShouldRetrieveAllMethodNamesOfTheGivenClassAndItsParents(): void
     {
         $function_index = [
-            'ExampleProject\\SomeClass' => [
-                'path' => 'src/SomeClass.php',
+            'ExampleProject\\SomeClass'          => [
+                'path'    => 'src/SomeClass.php',
                 'methods' => ['fn1', 'fn2'],
                 'parents' => ['ExampleProject\\SomeClassInterface', 'SomeVendor\\AbstractSomeClass'],
             ],
             'ExampleProject\\SomeClassInterface' => [
-                'path' => 'src/SomeClassInterface.php',
+                'path'    => 'src/SomeClassInterface.php',
                 'methods' => ['fn3', 'fn4'],
                 'parents' => [],
             ],
-            'SomeVendor\\AbstractSomeClass' => [
-                'path' => 'vendor/AbstractSomeClass.php',
+            'SomeVendor\\AbstractSomeClass'      => [
+                'path'    => 'vendor/AbstractSomeClass.php',
                 'methods' => ['fn5', 'fn6'],
                 'parents' => ['HelloWorld\\AnotherClass'],
             ],
-            'HelloWorld\\AnotherClass' => [
-                'path' => 'vendor/HelloWorld/AnotherClass.php',
+            'HelloWorld\\AnotherClass'           => [
+                'path'    => 'vendor/HelloWorld/AnotherClass.php',
                 'methods' => ['fn7', 'fn8'],
                 'parents' => ['ExampleProject\\RandomClass'],
             ],

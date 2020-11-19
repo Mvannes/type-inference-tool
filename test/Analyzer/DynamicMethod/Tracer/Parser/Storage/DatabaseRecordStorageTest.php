@@ -48,7 +48,7 @@ class DatabaseRecordStorageTest extends TestCase
      */
     private $params = ['$arg0'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $function_number     = 2001;
         $this->entry_record  = new EntryRecord($function_number, 'someFunction', true, 'file.php', $this->params);
@@ -56,12 +56,12 @@ class DatabaseRecordStorageTest extends TestCase
         $this->entry_record->setFunctionDeclarationFile('scr/file.php');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         self::$storage->clearRecords();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$conn = new MysqlPersistentConnection();
 
@@ -76,70 +76,70 @@ class DatabaseRecordStorageTest extends TestCase
         self::$storage = new DatabaseRecordStorage(self::$db_config_file);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         unlink(self::$db_config_file);
     }
 
-    public function testAppendingEntryRecordShouldInsertEntryRecordInDatabase()
+    public function testAppendingEntryRecordShouldInsertEntryRecordInDatabase(): void
     {
         self::$storage->appendEntryRecord($this->entry_record);
         self::$storage->finishInsertion();
 
-        self::$storage->loopEntryRecords(function (EntryRecord $record, array $params, $return_type) {
+        self::$storage->loopEntryRecords(function (EntryRecord $record, array $params, $return_type): void {
             self::assertEquals($this->entry_record, $record);
             self::assertEquals($this->params, $params);
             self::assertNull($return_type);
         });
     }
 
-    public function testAppendReturnRecordShouldReturnTheReturnRecordWithEntryRecord()
+    public function testAppendReturnRecordShouldReturnTheReturnRecordWithEntryRecord(): void
     {
         self::$storage->appendEntryRecord($this->entry_record);
         self::$storage->appendReturnRecord($this->return_record);
         self::$storage->finishInsertion();
 
-        self::$storage->loopEntryRecords(function (EntryRecord $record, array $params, $return_type) {
+        self::$storage->loopEntryRecords(function (EntryRecord $record, array $params, $return_type): void {
             self::assertEquals($this->entry_record, $record);
             self::assertEquals($this->return_record->getReturnType(), $return_type);
         });
     }
 
-    public function testWhenEntryRecordBatchLimitIsReachedThenInsertIntoDatabase()
+    public function testWhenEntryRecordBatchLimitIsReachedThenInsertIntoDatabase(): void
     {
         for ($i = 0; $i < DatabaseRecordStorage::RECORDS_PER_BATCH; $i++) {
             self::$storage->appendEntryRecord(new EntryRecord($i, 'function' . $i, true, 'file.php', []));
         }
 
         self::$storage->finishInsertion();
-        self::$storage->loopEntryRecords(function () use (&$count) {
+        self::$storage->loopEntryRecords(function () use (&$count): void {
             $count++;
         });
 
         self::assertSame(DatabaseRecordStorage::RECORDS_PER_BATCH, $count);
     }
 
-    public function testClearRecordsShouldStopTransactionAndEmptyTheDatabase()
+    public function testClearRecordsShouldStopTransactionAndEmptyTheDatabase(): void
     {
         self::$storage->appendEntryRecord($this->entry_record);
         self::$storage->appendReturnRecord($this->return_record);
         self::$storage->clearRecords();
 
         $count = 0;
-        self::$storage->loopEntryRecords(function () use (&$count) {
+        self::$storage->loopEntryRecords(function () use (&$count): void {
             $count++;
         });
 
         self::assertSame(0, $count);
     }
 
-    public function testWhenNoDatabaseConfigFoundThenThrowError()
+    public function testWhenNoDatabaseConfigFoundThenThrowError(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         new DatabaseRecordStorage('some invalid path');
     }
 
-    public function testWhenNotStartedTransactionIsCommittedThereShouldBeNoTransactionActive()
+    public function testWhenNotStartedTransactionIsCommittedThereShouldBeNoTransactionActive(): void
     {
         self::assertFalse(self::$storage->commitTransaction());
     }

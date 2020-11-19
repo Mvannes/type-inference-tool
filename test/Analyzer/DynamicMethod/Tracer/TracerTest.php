@@ -35,19 +35,19 @@ class TracerTest extends TestCase
      */
     private $trace_path;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->output_directory = __DIR__ . '/output/';
         $this->file_system      = new Filesystem();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->file_system->remove($this->trace_path);
         $this->file_system->remove($this->bootstrap_path);
     }
 
-    public function testGenerateTraceShouldGenerateABootstrapAndTraces()
+    public function testGenerateTraceShouldGenerateABootstrapAndTraces(): void
     {
         $project        = '/ExampleDynamicAnalysis/Example-Project-1';
         $fixtures       = dirname(__DIR__, 3) . '/Fixtures';
@@ -55,7 +55,6 @@ class TracerTest extends TestCase
         $inferrer_dir   = dirname(__DIR__, 4);
         $tracer         = new Tracer($this->output_directory, $target_project, $inferrer_dir, new NullLogger());
         $tracer->generateTrace();
-
 
         $this->trace_path     = $tracer->getFullOutputTracePath();
         $this->bootstrap_path = $tracer->getFullOutputBootstrapPath();

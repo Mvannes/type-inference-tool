@@ -36,7 +36,7 @@ class FileRecordStorage implements RecordStorageInterface
      *
      * @param EntryRecord $entry_record
      */
-    public function appendEntryRecord(EntryRecord $entry_record)
+    public function appendEntryRecord(EntryRecord $entry_record): void
     {
         file_put_contents($this->entry_records_file, serialize($entry_record) . PHP_EOL, FILE_APPEND);
     }
@@ -46,7 +46,7 @@ class FileRecordStorage implements RecordStorageInterface
      *
      * @param ReturnRecord $return_record
      */
-    public function appendReturnRecord(ReturnRecord $return_record)
+    public function appendReturnRecord(ReturnRecord $return_record): void
     {
         file_put_contents($this->return_records_file, serialize($return_record) . PHP_EOL, FILE_APPEND);
     }
@@ -58,7 +58,7 @@ class FileRecordStorage implements RecordStorageInterface
      * @param callable $callback(EntryRecord, parameter, ReturnRecord)
      * @throws \RuntimeException
      */
-    public function loopEntryRecords(callable $callback)
+    public function loopEntryRecords(callable $callback): void
     {
         $entry_records_reader = fopen($this->entry_records_file, 'rb');
 
@@ -91,7 +91,7 @@ class FileRecordStorage implements RecordStorageInterface
     /**
      * Removes the files containing the stored records.
      */
-    public function clearRecords()
+    public function clearRecords(): void
     {
         if (file_exists($this->entry_records_file)) {
             unlink($this->entry_records_file);
@@ -104,10 +104,7 @@ class FileRecordStorage implements RecordStorageInterface
         unlink($this->return_records_file);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function finishInsertion()
+    public function finishInsertion(): void
     {
         // No action needed
     }

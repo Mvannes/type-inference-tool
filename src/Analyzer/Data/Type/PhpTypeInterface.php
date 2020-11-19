@@ -24,5 +24,5 @@ interface PhpTypeInterface
     /**
      * @param bool $is_nullable
      */
-    public function setNullable(bool $is_nullable);
+    public function setNullable(bool $is_nullable): void;
 }

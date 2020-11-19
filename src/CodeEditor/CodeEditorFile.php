@@ -50,7 +50,7 @@ class CodeEditorFile
     /**
      * @param string $contents
      */
-    public function setContents(string $contents)
+    public function setContents(string $contents): void
     {
         $this->contents = $contents;
     }

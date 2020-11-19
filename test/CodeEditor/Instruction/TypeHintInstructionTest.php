@@ -36,7 +36,7 @@ class TypeHintInstructionTest extends TestCase
      */
     private $fixtures_dir;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fixtures_dir = dirname(__DIR__, 2) . '/Fixtures';
 
@@ -51,12 +51,12 @@ class TypeHintInstructionTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->fs->remove([$this->fixtures_dir . $this->target_project . $this->example_class]);
     }
 
-    public function testInstructionShouldAddAReturnTypeToFunctionDeclaration()
+    public function testInstructionShouldAddAReturnTypeToFunctionDeclaration(): void
     {
         $arg_number = 0;
         $type_hint  = new ScalarPhpType(ScalarPhpType::TYPE_INT);
@@ -75,7 +75,7 @@ class TypeHintInstructionTest extends TestCase
         self::assertSame($type_hint, $instruction_single_lined->getTargetTypeHint());
     }
 
-    public function testWhenFunctionNotDefinedInProjectThenDoNotUpdateFile()
+    public function testWhenFunctionNotDefinedInProjectThenDoNotUpdateFile(): void
     {
         $invalid_instruction = new TypeHintInstruction(
             $this->class,

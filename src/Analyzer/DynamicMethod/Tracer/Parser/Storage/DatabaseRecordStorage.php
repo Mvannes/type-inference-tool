@@ -23,7 +23,7 @@ class DatabaseRecordStorage implements RecordStorageInterface
      * Maximum amount of records in a batch. When this amount is reached, the
      * batch should be committed.
      */
-    const RECORDS_PER_BATCH = 2000;
+    public const RECORDS_PER_BATCH = 2000;
 
     /**
      * @var Connection
@@ -74,7 +74,7 @@ class DatabaseRecordStorage implements RecordStorageInterface
      *
      * @param EntryRecord $entry_record
      */
-    public function appendEntryRecord(EntryRecord $entry_record)
+    public function appendEntryRecord(EntryRecord $entry_record): void
     {
         $this->startInserting();
         $this->addToEntryRecordInsertBatch($entry_record);
@@ -93,7 +93,7 @@ class DatabaseRecordStorage implements RecordStorageInterface
      *
      * @param ReturnRecord $return_record
      */
-    public function appendReturnRecord(ReturnRecord $return_record)
+    public function appendReturnRecord(ReturnRecord $return_record): void
     {
         $this->startInserting();
         $this->addToReturnRecordInsertBatch($return_record);
@@ -103,7 +103,7 @@ class DatabaseRecordStorage implements RecordStorageInterface
      * By finishing the insertion the remaining records in the batches will be
      * committed.
      */
-    public function finishInsertion()
+    public function finishInsertion(): void
     {
         $this->is_inserting = false;
 
@@ -117,7 +117,7 @@ class DatabaseRecordStorage implements RecordStorageInterface
      * transaction. Use this alongside the finishInsertion-method to commit
      * data after starting a transaction.
      */
-    private function startInserting()
+    private function startInserting(): void
     {
         if ($this->is_inserting) {
             return;
@@ -133,7 +133,7 @@ class DatabaseRecordStorage implements RecordStorageInterface
      *
      * @throws DBALException
      */
-    public function clearRecords()
+    public function clearRecords(): void
     {
         if ($this->connection->isTransactionActive()) {
             $this->connection->rollBack();
@@ -152,7 +152,7 @@ class DatabaseRecordStorage implements RecordStorageInterface
      * @param callable $callback(EntryRecord, parameter, ReturnRecord)
      * @throws DBALException
      */
-    public function loopEntryRecords(callable $callback)
+    public function loopEntryRecords(callable $callback): void
     {
         $stmt = $this->connection->prepare(<<<'sql'
 SELECT
@@ -222,7 +222,7 @@ sql
      *
      * @param EntryRecord $record
      */
-    private function addToEntryRecordInsertBatch(EntryRecord $record)
+    private function addToEntryRecordInsertBatch(EntryRecord $record): void
     {
         $declaration_file           = $record->getFunctionDeclarationFile();
         $this->entry_record_batch[] = [
@@ -231,7 +231,7 @@ sql
             $record->getFunctionName(),
             $record->isUserDefined() ? 1 : 0,
             $record->getFileName(),
-            $declaration_file !== null ? $declaration_file : 'null',
+            $declaration_file ?? 'null',
         ];
 
         $this->addToEntryRecordParameterInsertBatch($record);
@@ -245,7 +245,7 @@ sql
      * @param string[] $columns
      * @param string[][] $data_set
      */
-    private function insertBatch(string $table_name, array $columns, array $data_set)
+    private function insertBatch(string $table_name, array $columns, array $data_set): void
     {
         $data_to_insert = [];
         foreach ($data_set as $row => $data) {
@@ -266,7 +266,7 @@ sql
      *
      * @throws DBALException
      */
-    private function insertEntryRecordBatch()
+    private function insertEntryRecordBatch(): void
     {
         if (count($this->entry_record_batch) === 0) {
             return;
@@ -285,7 +285,7 @@ sql
      *
      * @param EntryRecord $record
      */
-    private function addToEntryRecordParameterInsertBatch(EntryRecord $record)
+    private function addToEntryRecordParameterInsertBatch(EntryRecord $record): void
     {
         foreach ($record->getParameters() as $arg_nr => $parameter) {
             $this->entry_record_parameter_batch[] = [
@@ -302,7 +302,7 @@ sql
      *
      * @throws DBALException
      */
-    private function insertEntryRecordParameterBatch()
+    private function insertEntryRecordParameterBatch(): void
     {
         if (count($this->entry_record_parameter_batch) === 0) {
             return;
@@ -319,7 +319,7 @@ sql
      *
      * @param ReturnRecord $record
      */
-    private function addToReturnRecordInsertBatch(ReturnRecord $record)
+    private function addToReturnRecordInsertBatch(ReturnRecord $record): void
     {
         $this->return_record_batch[] = [Tool::getExecutionId(), $record->getNumber(), $record->getReturnType()];
     }
@@ -329,7 +329,7 @@ sql
      *
      * @throws DBALException
      */
-    private function insertReturnRecordBatch()
+    private function insertReturnRecordBatch(): void
     {
         if (count($this->return_record_batch) === 0) {
             return;

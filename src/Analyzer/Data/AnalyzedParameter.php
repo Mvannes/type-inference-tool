@@ -53,7 +53,7 @@ final class AnalyzedParameter
     /**
      * @param string $type
      */
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
@@ -69,7 +69,7 @@ final class AnalyzedParameter
     /**
      * @param bool $has_default_value
      */
-    public function setHasDefaultValue(bool $has_default_value)
+    public function setHasDefaultValue(bool $has_default_value): void
     {
         $this->has_default_value = $has_default_value;
     }
@@ -93,7 +93,7 @@ final class AnalyzedParameter
     /**
      * @param bool $has_type_hint
      */
-    public function setHasTypeHint(bool $has_type_hint)
+    public function setHasTypeHint(bool $has_type_hint): void
     {
         $this->has_type_hint = $has_type_hint;
     }
@@ -109,7 +109,7 @@ final class AnalyzedParameter
     /**
      * @param $name string
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }

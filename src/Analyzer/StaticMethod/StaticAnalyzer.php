@@ -33,7 +33,7 @@ final class StaticAnalyzer implements FunctionAnalyzerInterface
      * Prefix used for logs outputted by this class. Name used
      * by stopwatch for this class.
      */
-    const TIMER_LOG_NAME = 'STATIC_ANALYSIS';
+    private const TIMER_LOG_NAME = 'STATIC_ANALYSIS';
 
     /**
      * @var LoggerInterface
@@ -89,11 +89,11 @@ final class StaticAnalyzer implements FunctionAnalyzerInterface
      * @param AnalyzedFunctionCollection $functions
      * @param string $target_project
      */
-    private function analyseDocblocks(AnalyzedFunctionCollection $functions, string $target_project)
+    private function analyseDocblocks(AnalyzedFunctionCollection $functions, string $target_project): void
     {
         $this->analyseSourceAsts(
             $target_project,
-            function (array $ast, SplFileInfo $file, int $current, int $total) use ($functions, $target_project) {
+            function (array $ast, SplFileInfo $file, int $current, int $total) use ($functions, $target_project): void {
                 $this->logger->debug(self::TIMER_LOG_NAME . ' - ANALYSING_DOCBLOCKS: ' . $file->getFilename() . ' ('
                     . $current . '/' . $total . ')');
 
@@ -113,8 +113,10 @@ final class StaticAnalyzer implements FunctionAnalyzerInterface
      * @param AnalyzedFunctionCollection $analyzed_function_collection
      * @param string $target_project
      */
-    private function analyseMethods(AnalyzedFunctionCollection $analyzed_function_collection, string $target_project)
-    {
+    private function analyseMethods(
+        AnalyzedFunctionCollection $analyzed_function_collection,
+        string $target_project
+    ): void {
         $function_index = $this->createFunctionIndex($target_project);
 
         $this->analyseSourceAsts(
@@ -127,7 +129,7 @@ final class StaticAnalyzer implements FunctionAnalyzerInterface
             ) use (
                 $analyzed_function_collection,
                 &$function_index
-            ) {
+            ): void {
                 $this->logger->debug(self::TIMER_LOG_NAME . ' - ANALYSING_METHODS: ' . $file->getFilename() . ' ('
                     . $current . '/' . $total . ')');
 
@@ -149,7 +151,7 @@ final class StaticAnalyzer implements FunctionAnalyzerInterface
      * @param string $target_project
      * @param callable $execute Callback with arguments Node[] (AST) and SplFileInfo
      */
-    private function analyseSourceAsts(string $target_project, callable $execute)
+    private function analyseSourceAsts(string $target_project, callable $execute): void
     {
         $project_files = $this->retrieveProjectFiles($target_project);
         $ast_converter = new PhpAstConverter();
@@ -241,7 +243,7 @@ final class StaticAnalyzer implements FunctionAnalyzerInterface
 
             preg_match_all('/use ([\w\\\\]*);/', $file_contents, $use_stmts_matches);
             $use_stmts         = [];
-            $use_stmts_matches = array_walk($use_stmts_matches[1], function ($stmt) use (&$use_stmts) {
+            $use_stmts_matches = array_walk($use_stmts_matches[1], function ($stmt) use (&$use_stmts): void {
                 $parts                  = explode('\\', $stmt);
                 $class_name             = $parts[count($parts) - 1];
                 $use_stmts[$class_name] = $stmt;
@@ -271,7 +273,7 @@ final class StaticAnalyzer implements FunctionAnalyzerInterface
             }
 
             $function_index[$namespace . '\\' . $class_name] = [
-                'path' => $file->getRealPath(),
+                'path'    => $file->getRealPath(),
                 'methods' => $functions,
                 'parents' => array_merge($extended_class !== null ? [$extended_class] : [], $implements),
             ];

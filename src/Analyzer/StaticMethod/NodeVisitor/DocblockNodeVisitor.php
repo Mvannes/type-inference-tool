@@ -103,7 +103,7 @@ final class DocblockNodeVisitor extends AbstractAnalyzingNodeVisitor
      *
      * @param Namespace_ $node
      */
-    private function handleUseStatements(Namespace_ $node)
+    private function handleUseStatements(Namespace_ $node): void
     {
         foreach ($node->stmts as $stmt) {
             if (!$stmt instanceof Use_) {
@@ -124,7 +124,7 @@ final class DocblockNodeVisitor extends AbstractAnalyzingNodeVisitor
      * @param ClassMethod $class_method
      * @throws \InvalidArgumentException
      */
-    private function analyseDocBlock(ClassMethod $class_method)
+    private function analyseDocBlock(ClassMethod $class_method): void
     {
         if ($class_method->getDocComment() === null) {
             return;
@@ -152,7 +152,7 @@ final class DocblockNodeVisitor extends AbstractAnalyzingNodeVisitor
      * @throws \RuntimeException
      * @throws EntryNotFoundException
      */
-    private function resolveDocblockReturnType(Docblock $docblock)
+    private function resolveDocblockReturnType(Docblock $docblock): void
     {
         if (!$docblock->hasTag('return') || '' === $docblock->getTags('return')->get(0)->getType()) {
             return;
@@ -177,7 +177,7 @@ final class DocblockNodeVisitor extends AbstractAnalyzingNodeVisitor
      * @throws EntryNotFoundException
      * @throws \RuntimeException
      */
-    private function resolveDocblockParamTypes(Docblock $docblock)
+    private function resolveDocblockParamTypes(Docblock $docblock): void
     {
         if (!$docblock->hasTag('param')) {
             return;
@@ -303,19 +303,19 @@ final class DocblockNodeVisitor extends AbstractAnalyzingNodeVisitor
         }
 
         if (in_array($type_name, ['mixed', 'unknown', 'unknown_type'], true)) {
-            $type =  new UnresolvablePhpType(UnresolvablePhpType::DOCBLOCK_MULTIPLE, 'defined in docblock as mixed');
+            $type = new UnresolvablePhpType(UnresolvablePhpType::DOCBLOCK_MULTIPLE, 'defined in docblock as mixed');
             $type->setNullable($is_nullable);
             return $type;
         }
 
         if (strpos($type_name, '[]') !== false) {
-            $type =  new NonScalarPhpType(null, 'array');
+            $type = new NonScalarPhpType(null, 'array');
             $type->setNullable($is_nullable);
             return $type;
         }
 
         if ('self' === $type_name || '$this' === $type_name) {
-            $type =  TracerPhpTypeMapper::toPhpType($this->namespace . '\\' . $this->class_name);
+            $type = TracerPhpTypeMapper::toPhpType($this->namespace . '\\' . $this->class_name);
             $type->setNullable($is_nullable);
             return $type;
         }

@@ -40,30 +40,30 @@ use Symfony\Component\Stopwatch\Stopwatch;
  */
 class Tool extends Command
 {
-    const NAME                   = 'Type-Inference-Tool';
-    const EXECUTE_COMMAND        = 'execute';
-    const ARG_TARGET             = 'target';
-    const OPTION_LOG_FILE        = ['log-file', 'l'];
-    const OPTION_ANALYSE_ONLY    = ['analyse-only', 'a'];
-    const OPTION_SHOW_DIFF       = ['show-diff', 'd'];
-    const OPTION_STORAGE_TYPE    = ['storage-type', 's'];
-    const OPTION_DATABASE_CONFIG = ['db-config', 'db'];
-    const OPTION_IGNORE_FOLDERS  = ['ignore-folders', 'i'];
-    const OPTION_TRACE           = ['trace', 't'];
+    public const NAME                   = 'Type-Inference-Tool';
+    public const EXECUTE_COMMAND        = 'execute';
+    public const ARG_TARGET             = 'target';
+    public const OPTION_LOG_FILE        = ['log-file', 'l'];
+    public const OPTION_ANALYSE_ONLY    = ['analyse-only', 'a'];
+    public const OPTION_SHOW_DIFF       = ['show-diff', 'd'];
+    public const OPTION_STORAGE_TYPE    = ['storage-type', 's'];
+    public const OPTION_DATABASE_CONFIG = ['db-config', 'db'];
+    public const OPTION_IGNORE_FOLDERS  = ['ignore-folders', 'i'];
+    public const OPTION_TRACE           = ['trace', 't'];
 
-    const STORAGE_TYPE_MEMORY   = 'mem';
-    const STORAGE_TYPE_DATABASE = 'db';
-    const STORAGE_TYPE_FILE     = 'file';
+    public const STORAGE_TYPE_MEMORY   = 'mem';
+    public const STORAGE_TYPE_DATABASE = 'db';
+    public const STORAGE_TYPE_FILE     = 'file';
 
-    const STORAGE_TYPES = [
-        'memory' => self::STORAGE_TYPE_MEMORY,
+    public const STORAGE_TYPES = [
+        'memory'   => self::STORAGE_TYPE_MEMORY,
         'database' => self::STORAGE_TYPE_DATABASE,
-        'file' => self::STORAGE_TYPE_FILE,
+        'file'     => self::STORAGE_TYPE_FILE,
     ];
 
-    const RESULTS_COLUMN_RETURN_TYPES = 'Return types';
-    const RESULTS_COLUMN_TYPE_HINTS   = 'Type hints';
-    const RESULTS_COLUMN_TOTAL        = 'Total';
+    public const RESULTS_COLUMN_RETURN_TYPES = 'Return types';
+    public const RESULTS_COLUMN_TYPE_HINTS   = 'Type hints';
+    public const RESULTS_COLUMN_TOTAL        = 'Total';
 
     /**
      * Unique instance ID used to handle database concurrency.
@@ -183,7 +183,7 @@ class Tool extends Command
             "Type-Inference-Tool started for {project} (execution_id: '{id}')",
             [
                 'project' => $target_project,
-                'id' => self::getExecutionId(),
+                'id'      => self::getExecutionId(),
             ]
         );
 
@@ -219,6 +219,7 @@ class Tool extends Command
         $this->io->success('Done!');
         $this->printResults();
         $this->outputStatistics($stopwatch, $logger);
+        return 0;
     }
 
     /**
@@ -276,7 +277,7 @@ class Tool extends Command
      * @param Stopwatch $stopwatch
      * @param LoggerInterface $logger
      */
-    private function outputStatistics(Stopwatch $stopwatch, LoggerInterface $logger)
+    private function outputStatistics(Stopwatch $stopwatch, LoggerInterface $logger): void
     {
         $total_time = round($stopwatch->stop(self::NAME)->getDuration() / 1000, 2);
         $mem        = round(memory_get_peak_usage(true) / 1024 / 1024, 2);
@@ -292,12 +293,12 @@ class Tool extends Command
      * passes a callable to all instructions, allowing the instruction to
      * output a diff before overwriting a file.
      */
-    private function enableDiffOutput()
+    private function enableDiffOutput(): void
     {
         $this->io->section('Diffs');
         $differ = new Differ('', false);
         $this->io->writeln("--- Original\n+++ New\n");
-        $this->code_editor->setDiffHandler(function (string $old, string $new, string $file) use ($differ) {
+        $this->code_editor->setDiffHandler(function (string $old, string $new, string $file) use ($differ): void {
             $diff = $differ->diff($old, $new);
 
             if ($diff === '') {
@@ -351,7 +352,7 @@ class Tool extends Command
         array $instructions,
         bool $show_diff,
         bool $overwrite_files
-    ) {
+    ): void {
         if ($overwrite_files) {
             $this->io->text('<info>Applying generated instructions</info>');
         }
@@ -367,7 +368,7 @@ class Tool extends Command
     /**
      * Outputs a table containing the amount of data inferred.
      */
-    private function printResults()
+    private function printResults(): void
     {
         $this->io->section('Results');
         $this->io->text('Inferred and added the following amount of data:');
@@ -376,8 +377,8 @@ class Tool extends Command
 
         $inferred_data = [
             self::RESULTS_COLUMN_RETURN_TYPES => 0,
-            self::RESULTS_COLUMN_TYPE_HINTS => 0,
-            self::RESULTS_COLUMN_TOTAL => count($instructions),
+            self::RESULTS_COLUMN_TYPE_HINTS   => 0,
+            self::RESULTS_COLUMN_TOTAL        => count($instructions),
         ];
 
         foreach ($instructions as $instruction) {
